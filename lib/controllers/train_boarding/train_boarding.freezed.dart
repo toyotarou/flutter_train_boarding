@@ -100,7 +100,8 @@ class __$$TrainBoardingStateImplCopyWithImpl<$Res>
 
 class _$TrainBoardingStateImpl implements _TrainBoardingState {
   const _$TrainBoardingStateImpl(
-      {final Map<String, TrainBoardingModel> trainBoardingDateMap = const {}})
+      {final Map<String, TrainBoardingModel> trainBoardingDateMap =
+          const <String, TrainBoardingModel>{}})
       : _trainBoardingDateMap = trainBoardingDateMap;
 
   final Map<String, TrainBoardingModel> _trainBoardingDateMap;

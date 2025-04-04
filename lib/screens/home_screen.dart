@@ -30,25 +30,62 @@ class _HomeScreenState extends ConsumerState<HomeScreen> with ControllersMixin<H
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        actions: <Widget>[
-          IconButton(
-            onPressed: () {
-              Navigator.pushReplacement(
-                context,
-                // ignore: inference_failure_on_instance_creation, always_specify_types
-                MaterialPageRoute(builder: (BuildContext context) => const HomeScreen()),
-              );
-            },
-            icon: const Icon(Icons.refresh),
-          ),
-        ],
-      ),
       body: SafeArea(
         child: DefaultTextStyle(
           style: const TextStyle(fontSize: 12),
-          child: Column(children: <Widget>[Expanded(child: displayTrainBoardingList())]),
+          child: Column(
+            children: <Widget>[
+              SizedBox(
+                height: 100,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    displayYearList(),
+                    const SizedBox.shrink(),
+                  ],
+                ),
+              ),
+              Expanded(child: displayTrainBoardingList()),
+            ],
+          ),
         ),
+      ),
+    );
+  }
+
+  ///
+  Widget displayYearList() {
+    final List<String> yearList = <String>['-'];
+
+    trainBoardingState.trainBoardingDateMap.forEach((String key, TrainBoardingModel value) {
+      final List<String> exKey = key.split('-');
+
+      if (!yearList.contains(exKey[0])) {
+        yearList.add(exKey[0]);
+      }
+    });
+
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      child: Row(
+        children: yearList.map(
+          (String e) {
+            return Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 5),
+              child: GestureDetector(
+                onTap: () {
+                  appParamNotifier.setSelectedYear(year: e);
+                },
+                child: CircleAvatar(
+                  backgroundColor: (appParamState.selectedYear == e)
+                      ? Colors.yellowAccent.withOpacity(0.2)
+                      : Colors.white.withOpacity(0.2),
+                  child: Text(e, style: const TextStyle(fontSize: 12)),
+                ),
+              ),
+            );
+          },
+        ).toList(),
       ),
     );
   }
@@ -61,73 +98,71 @@ class _HomeScreenState extends ConsumerState<HomeScreen> with ControllersMixin<H
 
     trainBoardingState.trainBoardingDateMap.forEach(
       (String key, TrainBoardingModel value) {
-        final List<String> stationList = <String>[];
+        final List<String> exKey = key.split('-');
 
-        String keepStation = '';
-        value.station.split('\r\n').forEach(
-          (String element) {
-            element.split('-').forEach(
-              (String element2) {
-                if (keepStation != element2.trim()) {
-                  stationList.add(element2.trim());
-                }
+        if (appParamState.selectedYear == '-' || appParamState.selectedYear == exKey[0]) {
+          final List<String> stationList = <String>[];
 
-                keepStation = element2.trim();
-              },
-            );
-          },
-        );
+          String keepStation = '';
+          value.station.split('\r\n').forEach(
+            (String element) {
+              element.split('-').forEach(
+                (String element2) {
+                  if (keepStation != element2.trim()) {
+                    stationList.add(element2.trim());
+                  }
 
-        list.add(
-          Container(
-            decoration: BoxDecoration(border: Border(bottom: BorderSide(color: Colors.white.withOpacity(0.3)))),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Text(key),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: stationList.map(
-                    (String e) {
-                      if (e == '') {
-                        return const SizedBox.shrink();
-                      }
+                  keepStation = element2.trim();
+                },
+              );
+            },
+          );
 
-                      StationModel? station = stationState.stationNameMap[e];
+          list.add(
+            Container(
+              decoration: BoxDecoration(border: Border(bottom: BorderSide(color: Colors.white.withOpacity(0.3)))),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Text(key),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: stationList.map(
+                      (String e) {
+                        if (e == '') {
+                          return const SizedBox.shrink();
+                        }
 
-                      station ??= complementDummyMap[e];
+                        StationModel? station = stationState.stationNameMap[e];
 
-                      if (station == null) {
-                        print(key);
-                        print(e);
-                        print('-----');
-                      }
+                        station ??= complementDummyMap[e];
 
-                      return Column(
-                        children: <Widget>[
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: <Widget>[
-                              Text(e),
-                              const SizedBox.shrink(),
-                            ],
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: <Widget>[
-                              const SizedBox.shrink(),
-                              Text((station != null) ? '${station.lat} / ${station.lng}' : '-----'),
-                            ],
-                          ),
-                        ],
-                      );
-                    },
-                  ).toList(),
-                ),
-              ],
+                        return Column(
+                          children: <Widget>[
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: <Widget>[
+                                Text(e),
+                                const SizedBox.shrink(),
+                              ],
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: <Widget>[
+                                const SizedBox.shrink(),
+                                Text((station != null) ? '${station.lat} / ${station.lng}' : '-----'),
+                              ],
+                            ),
+                          ],
+                        );
+                      },
+                    ).toList(),
+                  ),
+                ],
+              ),
             ),
-          ),
-        );
+          );
+        }
       },
     );
 

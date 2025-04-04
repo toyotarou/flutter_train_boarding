@@ -7,7 +7,7 @@ part of 'train_boarding.dart';
 // **************************************************************************
 
 String _$trainBoardingControllerHash() =>
-    r'280f14fd3cf238a11b363b883804ce52eccb2e95';
+    r'f5027b19f8cc6bb2e17515b582d321ec7ba3fae7';
 
 /// See also [TrainBoardingController].
 @ProviderFor(TrainBoardingController)
