@@ -4,8 +4,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../controllers/controllers_mixin.dart';
 import '../extensions/extensions.dart';
 import '../models/station.dart';
+import '../models/station_lat_lng.dart';
 import '../models/train_boarding.dart';
 import '../utility/utility.dart';
+import 'components/dummy_alert.dart';
+import 'parts/train_boarding_dialog.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
@@ -16,6 +19,8 @@ class HomeScreen extends ConsumerStatefulWidget {
 
 class _HomeScreenState extends ConsumerState<HomeScreen> with ControllersMixin<HomeScreen> {
   Utility utility = Utility();
+
+  Map<String, List<StationLatLng>> stationLatLngDateMap = <String, List<StationLatLng>>{};
 
   ///
   @override
@@ -100,6 +105,10 @@ class _HomeScreenState extends ConsumerState<HomeScreen> with ControllersMixin<H
 
     final List<Widget> list = <Widget>[];
 
+    trainBoardingState.trainBoardingDateMap.forEach((String key, TrainBoardingModel value) {
+      stationLatLngDateMap[key] = <StationLatLng>[];
+    });
+
     trainBoardingState.trainBoardingDateMap.forEach(
       (String key, TrainBoardingModel value) {
         final List<String> exKey = key.split('-');
@@ -128,7 +137,25 @@ class _HomeScreenState extends ConsumerState<HomeScreen> with ControllersMixin<H
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  Text(key),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      Text(key),
+                      IconButton(
+                        onPressed: () {
+                          TrainBoardingDialog(
+                            context: context,
+                            widget: DummyAlert(
+                              date: key,
+                              stationLatLngList: stationLatLngDateMap[key] ?? <StationLatLng>[],
+                            ),
+                          );
+                        },
+                        icon: const Icon(Icons.pages),
+                        color: Colors.white.withOpacity(0.3),
+                      ),
+                    ],
+                  ),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: stationList.map(
@@ -140,6 +167,12 @@ class _HomeScreenState extends ConsumerState<HomeScreen> with ControllersMixin<H
                         StationModel? station = stationState.stationNameMap[e];
 
                         station ??= complementDummyMap[e];
+
+                        if (station != null) {
+                          stationLatLngDateMap[key]?.add(
+                            StationLatLng(stationName: e, lat: station.lat, lng: station.lng),
+                          );
+                        }
 
                         return Container(
                           width: context.screenSize.width,
