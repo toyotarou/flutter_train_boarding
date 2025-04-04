@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../controllers/controllers_mixin.dart';
+import '../extensions/extensions.dart';
 import '../models/station.dart';
 import '../models/train_boarding.dart';
 import '../utility/utility.dart';
@@ -75,6 +76,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> with ControllersMixin<H
               child: GestureDetector(
                 onTap: () {
                   appParamNotifier.setSelectedYear(year: e);
+
+                  // ignore: inference_failure_on_instance_creation, always_specify_types
+                  Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const HomeScreen()));
                 },
                 child: CircleAvatar(
                   backgroundColor: (appParamState.selectedYear == e)
@@ -137,23 +141,28 @@ class _HomeScreenState extends ConsumerState<HomeScreen> with ControllersMixin<H
 
                         station ??= complementDummyMap[e];
 
-                        return Column(
-                          children: <Widget>[
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: <Widget>[
-                                Text(e),
-                                const SizedBox.shrink(),
-                              ],
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: <Widget>[
-                                const SizedBox.shrink(),
-                                Text((station != null) ? '${station.lat} / ${station.lng}' : '-----'),
-                              ],
-                            ),
-                          ],
+                        return Container(
+                          width: context.screenSize.width,
+                          decoration: BoxDecoration(
+                              color: (station == null) ? Colors.purple.withOpacity(0.2) : Colors.transparent),
+                          child: Column(
+                            children: <Widget>[
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: <Widget>[
+                                  Text(e),
+                                  const SizedBox.shrink(),
+                                ],
+                              ),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: <Widget>[
+                                  const SizedBox.shrink(),
+                                  Text((station != null) ? '${station.lat} / ${station.lng}' : '-----'),
+                                ],
+                              ),
+                            ],
+                          ),
                         );
                       },
                     ).toList(),
