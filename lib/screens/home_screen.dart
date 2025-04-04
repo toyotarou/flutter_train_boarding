@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../controllers/controllers_mixin.dart';
 import '../models/station.dart';
 import '../models/train_boarding.dart';
+import '../utility/utility.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
@@ -13,6 +14,8 @@ class HomeScreen extends ConsumerStatefulWidget {
 }
 
 class _HomeScreenState extends ConsumerState<HomeScreen> with ControllersMixin<HomeScreen> {
+  Utility utility = Utility();
+
   ///
   @override
   void initState() {
@@ -27,14 +30,24 @@ class _HomeScreenState extends ConsumerState<HomeScreen> with ControllersMixin<H
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        actions: <Widget>[
+          IconButton(
+            onPressed: () {
+              Navigator.pushReplacement(
+                context,
+                // ignore: inference_failure_on_instance_creation, always_specify_types
+                MaterialPageRoute(builder: (BuildContext context) => const HomeScreen()),
+              );
+            },
+            icon: const Icon(Icons.refresh),
+          ),
+        ],
+      ),
       body: SafeArea(
         child: DefaultTextStyle(
           style: const TextStyle(fontSize: 12),
-          child: Column(
-            children: <Widget>[
-              Expanded(child: displayTrainBoardingList()),
-            ],
-          ),
+          child: Column(children: <Widget>[Expanded(child: displayTrainBoardingList())]),
         ),
       ),
     );
@@ -42,6 +55,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> with ControllersMixin<H
 
   ///
   Widget displayTrainBoardingList() {
+    final Map<String, StationModel> complementDummyMap = utility.getComplementDummyMap();
+
     final List<Widget> list = <Widget>[];
 
     trainBoardingState.trainBoardingDateMap.forEach(
@@ -65,11 +80,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> with ControllersMixin<H
 
         list.add(
           Container(
-            decoration: BoxDecoration(
-              border: Border(
-                bottom: BorderSide(color: Colors.white.withOpacity(0.3)),
-              ),
-            ),
+            decoration: BoxDecoration(border: Border(bottom: BorderSide(color: Colors.white.withOpacity(0.3)))),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
@@ -78,7 +89,13 @@ class _HomeScreenState extends ConsumerState<HomeScreen> with ControllersMixin<H
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: stationList.map(
                     (String e) {
-                      final StationModel? station = stationState.stationNameMap[e];
+                      if (e == '') {
+                        return const SizedBox.shrink();
+                      }
+
+                      StationModel? station = stationState.stationNameMap[e];
+
+                      station ??= complementDummyMap[e];
 
                       return Column(
                         children: <Widget>[
@@ -111,10 +128,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> with ControllersMixin<H
     return CustomScrollView(
       slivers: <Widget>[
         SliverList(
-          delegate: SliverChildBuilderDelegate(
-            (BuildContext context, int index) => list[index],
-            childCount: list.length,
-          ),
+          delegate:
+              SliverChildBuilderDelegate((BuildContext context, int index) => list[index], childCount: list.length),
         ),
       ],
     );
