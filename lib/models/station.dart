@@ -1,8 +1,8 @@
 import '../extensions/extensions.dart';
 
-class Station {
+class StationModel {
 
-  Station({
+  StationModel({
     required this.id,
     required this.trainNumber,
     required this.stationName,
@@ -12,7 +12,7 @@ class Station {
     required this.prefecture,
   });
 
-  factory Station.fromJson(Map<String, dynamic> json) => Station(
+  factory StationModel.fromJson(Map<String, dynamic> json) => StationModel(
         id: json['id'].toString().toInt(),
         trainNumber: json['train_number'].toString(),
         stationName: json['station_name'].toString(),

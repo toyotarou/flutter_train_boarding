@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../controllers/controllers_mixin.dart';
+import '../models/station.dart';
 import '../models/train_boarding.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
@@ -18,6 +19,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> with ControllersMixin<H
     super.initState();
 
     trainBoardingNotifier.getAllTrainBoarding();
+
+    stationNotifier.getAllStation();
   }
 
   ///
@@ -25,10 +28,13 @@ class _HomeScreenState extends ConsumerState<HomeScreen> with ControllersMixin<H
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        child: Column(
-          children: <Widget>[
-            Expanded(child: displayTrainBoardingList()),
-          ],
+        child: DefaultTextStyle(
+          style: const TextStyle(fontSize: 12),
+          child: Column(
+            children: <Widget>[
+              Expanded(child: displayTrainBoardingList()),
+            ],
+          ),
         ),
       ),
     );
@@ -38,9 +44,69 @@ class _HomeScreenState extends ConsumerState<HomeScreen> with ControllersMixin<H
   Widget displayTrainBoardingList() {
     final List<Widget> list = <Widget>[];
 
-    trainBoardingState.trainBoardingDateMap.forEach((String key, TrainBoardingModel value) {
-      list.add(Text(key));
-    });
+    trainBoardingState.trainBoardingDateMap.forEach(
+      (String key, TrainBoardingModel value) {
+        final List<String> stationList = <String>[];
+
+        String keepStation = '';
+        value.station.split('\r\n').forEach(
+          (String element) {
+            element.split('-').forEach(
+              (String element2) {
+                if (keepStation != element2.trim()) {
+                  stationList.add(element2.trim());
+                }
+
+                keepStation = element2.trim();
+              },
+            );
+          },
+        );
+
+        list.add(
+          Container(
+            decoration: BoxDecoration(
+              border: Border(
+                bottom: BorderSide(color: Colors.white.withOpacity(0.3)),
+              ),
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Text(key),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: stationList.map(
+                    (String e) {
+                      final StationModel? station = stationState.stationNameMap[e];
+
+                      return Column(
+                        children: <Widget>[
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: <Widget>[
+                              Text(e),
+                              const SizedBox.shrink(),
+                            ],
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: <Widget>[
+                              const SizedBox.shrink(),
+                              Text((station != null) ? '${station.lat} / ${station.lng}' : '-----'),
+                            ],
+                          ),
+                        ],
+                      );
+                    },
+                  ).toList(),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
 
     return CustomScrollView(
       slivers: <Widget>[
