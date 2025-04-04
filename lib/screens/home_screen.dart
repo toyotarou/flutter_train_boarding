@@ -97,6 +97,12 @@ class _HomeScreenState extends ConsumerState<HomeScreen> with ControllersMixin<H
 
                       station ??= complementDummyMap[e];
 
+                      if (station == null) {
+                        print(key);
+                        print(e);
+                        print('-----');
+                      }
+
                       return Column(
                         children: <Widget>[
                           Row(
