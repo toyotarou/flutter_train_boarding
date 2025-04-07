@@ -6,6 +6,8 @@ import '../models/station.dart';
 import '../models/station_lat_lng.dart';
 import '../models/train_boarding.dart';
 import '../utility/utility.dart';
+import 'components/train_boarding_map_alert.dart';
+import 'parts/train_boarding_dialog.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
@@ -17,7 +19,7 @@ class HomeScreen extends ConsumerStatefulWidget {
 class _HomeScreenState extends ConsumerState<HomeScreen> with ControllersMixin<HomeScreen> {
   Utility utility = Utility();
 
-  Map<String, List<StationLatLng>> stationLatLngDateMap = <String, List<StationLatLng>>{};
+  Map<String, List<List<StationLatLng>>> stationLatLngDateMap = <String, List<List<StationLatLng>>>{};
 
   ///
   @override
@@ -100,21 +102,25 @@ class _HomeScreenState extends ConsumerState<HomeScreen> with ControllersMixin<H
   Widget displayTrainBoardingList() {
     final Map<String, StationModel> complementDummyMap = utility.getComplementDummyMap();
 
-    final List<Widget> list = <Widget>[];
+    final List<Widget> displayList = <Widget>[];
 
     trainBoardingState.trainBoardingDateMap.forEach((String key, TrainBoardingModel value) {
-      stationLatLngDateMap[key] = <StationLatLng>[];
+      stationLatLngDateMap[key] = <List<StationLatLng>>[];
     });
 
     trainBoardingState.trainBoardingDateMap.forEach((String key, TrainBoardingModel value) {
       final List<String> exKey = key.split('-');
 
       if (appParamState.selectedYear == '-' || appParamState.selectedYear == exKey[0]) {
-        final List<Widget> list2 = <Widget>[];
+        final List<Widget> displayList2 = <Widget>[];
+
+        final List<List<StationLatLng>> list2 = <List<StationLatLng>>[];
 
         value.station.split('\r\n').forEach((String element) {
           if (element.trim() != '') {
-            final List<Widget> list3 = <Widget>[];
+            final List<Widget> displayList3 = <Widget>[];
+
+            final List<StationLatLng> list3 = <StationLatLng>[];
 
             element.split('-').forEach(
               (String element2) {
@@ -122,7 +128,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> with ControllersMixin<H
 
                 station ??= complementDummyMap[element2];
 
-                list3.add(
+                displayList3.add(
                   Container(
                     width: 120,
                     margin: const EdgeInsets.all(2),
@@ -142,19 +148,22 @@ class _HomeScreenState extends ConsumerState<HomeScreen> with ControllersMixin<H
                     ),
                   ),
                 );
+
+                if (station != null) {
+                  list3.add(StationLatLng(stationName: element2, lat: station.lat, lng: station.lng));
+                }
               },
             );
 
-            list2.add(
-              SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: Row(children: list3),
-              ),
+            list2.add(list3);
+
+            displayList2.add(
+              SingleChildScrollView(scrollDirection: Axis.horizontal, child: Row(children: displayList3)),
             );
           }
         });
 
-        list.add(
+        displayList.add(
           Container(
             decoration: BoxDecoration(border: Border(bottom: BorderSide(color: Colors.white.withOpacity(0.3)))),
             child: Column(
@@ -165,137 +174,89 @@ class _HomeScreenState extends ConsumerState<HomeScreen> with ControllersMixin<H
                   margin: const EdgeInsets.all(2),
                   padding: const EdgeInsets.all(2),
                   decoration: BoxDecoration(color: Colors.yellowAccent.withOpacity(0.2)),
-                  child: Row(children: <Widget>[Text(key), const SizedBox.shrink()]),
+                  child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: <Widget>[
+                    Text(key),
+                    GestureDetector(
+                      onTap: () {
+                        // ignore: prefer_final_locals
+                        ({List<StationLatLng> even, List<StationLatLng> odd}) oddEvenStationList =
+                            makeKisuuGuusuuStationList(stationLatLngDateMap[key] ?? <List<StationLatLng>>[]);
+
+                        TrainBoardingDialog(
+                          context: context,
+                          widget: TrainBoardingMapAlert(
+                            date: key,
+                            stationLatLngDateList: stationLatLngDateMap[key] ?? <List<StationLatLng>>[],
+                            oddStationList: oddEvenStationList.odd,
+                            evenStationList: oddEvenStationList.even,
+                          ),
+                        );
+                      },
+                      child: const Icon(Icons.map),
+                    ),
+                  ]),
                 ),
                 const SizedBox(height: 10),
                 Column(
                   mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: list2,
+                  children: displayList2,
                 ),
                 const SizedBox(height: 20),
               ],
             ),
           ),
         );
+
+        stationLatLngDateMap[key] = list2;
       }
     });
-
-    /*
-
-
-
-    trainBoardingState.trainBoardingDateMap.forEach(
-      (String key, TrainBoardingModel value) {
-        final List<String> exKey = key.split('-');
-
-        if (appParamState.selectedYear == '-' || appParamState.selectedYear == exKey[0]) {
-          final List<String> stationList = <String>[];
-
-          String keepStation = '';
-          value.station.split('\r\n').forEach(
-            (String element) {
-              element.split('-').forEach(
-                (String element2) {
-                  if (keepStation != element2.trim()) {
-                    stationList.add(element2.trim());
-                  }
-
-                  keepStation = element2.trim();
-                },
-              );
-            },
-          );
-
-          list.add(
-            Container(
-              decoration: BoxDecoration(border: Border(bottom: BorderSide(color: Colors.white.withOpacity(0.3)))),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      Text(key),
-                      IconButton(
-                        onPressed: () {
-                          TrainBoardingDialog(
-                            context: context,
-                            widget: DummyAlert(
-                              date: key,
-                              stationLatLngList: stationLatLngDateMap[key] ?? <StationLatLng>[],
-                            ),
-                          );
-                        },
-                        icon: const Icon(Icons.pages),
-                        color: Colors.white.withOpacity(0.3),
-                      ),
-                    ],
-                  ),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: stationList.map(
-                      (String e) {
-                        if (e == '') {
-                          return const SizedBox.shrink();
-                        }
-
-                        StationModel? station = stationState.stationNameMap[e];
-
-                        station ??= complementDummyMap[e];
-
-                        if (station != null) {
-                          stationLatLngDateMap[key]?.add(
-                            StationLatLng(stationName: e, lat: station.lat, lng: station.lng),
-                          );
-                        }
-
-                        return Container(
-                          width: context.screenSize.width,
-                          decoration: BoxDecoration(
-                              color: (station == null) ? Colors.purple.withOpacity(0.2) : Colors.transparent),
-                          child: Column(
-                            children: <Widget>[
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: <Widget>[
-                                  Text(e),
-                                  const SizedBox.shrink(),
-                                ],
-                              ),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: <Widget>[
-                                  const SizedBox.shrink(),
-                                  Text((station != null) ? '${station.lat} / ${station.lng}' : '-----'),
-                                ],
-                              ),
-                            ],
-                          ),
-                        );
-                      },
-                    ).toList(),
-                  ),
-                ],
-              ),
-            ),
-          );
-        }
-      },
-    );
-
-
-
-
-    */
 
     return CustomScrollView(
       slivers: <Widget>[
         SliverList(
-          delegate:
-              SliverChildBuilderDelegate((BuildContext context, int index) => list[index], childCount: list.length),
+          delegate: SliverChildBuilderDelegate(
+            (BuildContext context, int index) => displayList[index],
+            childCount: displayList.length,
+          ),
         ),
       ],
     );
+  }
+
+  ///
+  ({List<StationLatLng> odd, List<StationLatLng> even}) makeKisuuGuusuuStationList(
+      List<List<StationLatLng>> stationLatLngDateList) {
+    final Map<String, int> countMap = <String, int>{};
+    final Map<String, StationLatLng> stationInfoMap = <String, StationLatLng>{};
+
+    for (final List<StationLatLng> dailyList in stationLatLngDateList) {
+      for (final StationLatLng station in dailyList) {
+
+        /*
+
+        ①	key	いま数えたい駅名 (station.stationName) をキーにする
+        ②	update	その駅名が すでにマップにある 場合に実行される関数。
+        prev は現在格納されている出現回数なので、prev + 1 で 1 増やして返す。
+        ③	ifAbsent	その駅名が まだマップに無い 場合に実行される関数。
+        初回なので出現回数を 1 として返す。
+
+        */
+
+        countMap.update(station.stationName, (int prev) => prev + 1, ifAbsent: () => 1);
+
+        stationInfoMap.putIfAbsent(station.stationName, () => station);
+      }
+    }
+
+    final List<StationLatLng> odd = <StationLatLng>[];
+    final List<StationLatLng> even = <StationLatLng>[];
+
+    for (final MapEntry<String, int> entry in countMap.entries) {
+      final StationLatLng station = stationInfoMap[entry.key]!;
+      (entry.value.isOdd ? odd : even).add(station);
+    }
+
+    return (odd: odd, even: even);
   }
 }
