@@ -2,13 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../controllers/controllers_mixin.dart';
-import '../extensions/extensions.dart';
 import '../models/station.dart';
 import '../models/station_lat_lng.dart';
 import '../models/train_boarding.dart';
 import '../utility/utility.dart';
-import 'components/dummy_alert.dart';
-import 'parts/train_boarding_dialog.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
@@ -109,6 +106,85 @@ class _HomeScreenState extends ConsumerState<HomeScreen> with ControllersMixin<H
       stationLatLngDateMap[key] = <StationLatLng>[];
     });
 
+    trainBoardingState.trainBoardingDateMap.forEach((String key, TrainBoardingModel value) {
+      final List<String> exKey = key.split('-');
+
+      if (appParamState.selectedYear == '-' || appParamState.selectedYear == exKey[0]) {
+        final List<Widget> list2 = <Widget>[];
+
+        value.station.split('\r\n').forEach((String element) {
+          if (element.trim() != '') {
+            final List<Widget> list3 = <Widget>[];
+
+            element.split('-').forEach(
+              (String element2) {
+                StationModel? station = stationState.stationNameMap[element2];
+
+                station ??= complementDummyMap[element2];
+
+                list3.add(
+                  Container(
+                    width: 120,
+                    margin: const EdgeInsets.all(2),
+                    padding: const EdgeInsets.all(2),
+                    decoration: BoxDecoration(
+                      border: Border.all(color: Colors.white.withOpacity(0.4)),
+                      color: (station == null) ? Colors.purple.withOpacity(0.2) : Colors.transparent,
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Text(element2),
+                        const SizedBox(height: 10),
+                        Text((station != null) ? station.lat : '-----'),
+                        Text((station != null) ? station.lng : '-----'),
+                      ],
+                    ),
+                  ),
+                );
+              },
+            );
+
+            list2.add(
+              SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Row(children: list3),
+              ),
+            );
+          }
+        });
+
+        list.add(
+          Container(
+            decoration: BoxDecoration(border: Border(bottom: BorderSide(color: Colors.white.withOpacity(0.3)))),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Container(
+                  margin: const EdgeInsets.all(2),
+                  padding: const EdgeInsets.all(2),
+                  decoration: BoxDecoration(color: Colors.yellowAccent.withOpacity(0.2)),
+                  child: Row(children: <Widget>[Text(key), const SizedBox.shrink()]),
+                ),
+                const SizedBox(height: 10),
+                Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: list2,
+                ),
+                const SizedBox(height: 20),
+              ],
+            ),
+          ),
+        );
+      }
+    });
+
+    /*
+
+
+
     trainBoardingState.trainBoardingDateMap.forEach(
       (String key, TrainBoardingModel value) {
         final List<String> exKey = key.split('-');
@@ -207,6 +283,11 @@ class _HomeScreenState extends ConsumerState<HomeScreen> with ControllersMixin<H
         }
       },
     );
+
+
+
+
+    */
 
     return CustomScrollView(
       slivers: <Widget>[
