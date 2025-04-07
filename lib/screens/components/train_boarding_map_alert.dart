@@ -34,8 +34,6 @@ class _TrainBoardingMapAlertState extends State<TrainBoardingMapAlert> {
   ///
   @override
   Widget build(BuildContext context) {
-//
-//
 //     for (final List<StationLatLng> element in widget.stationLatLngDateList) {
 //       final List<String> staList = <String>[];
 //
@@ -54,6 +52,7 @@ class _TrainBoardingMapAlertState extends State<TrainBoardingMapAlert> {
 //     print(pairingResult.unpairedRoutes);
 
     /*
+
 
 
 
@@ -91,6 +90,17 @@ I/flutter ( 6220): [
 [Instance of 'StationLatLng', Instance of 'StationLatLng', Instance of 'StationLatLng'],
 [Instance of 'StationLatLng', Instance of 'StationLatLng', Instance of 'StationLatLng', Instance of 'StationLatLng']
 ]
+
+
+I/flutter ( 4721): 京成西船-京成成田
+I/flutter ( 4721): 成田-香取
+I/flutter ( 4721): 香取-成田
+I/flutter ( 4721): 京成成田-京成西船
+I/flutter ( 4721): ----------
+I/flutter ( 4721): [[1, 2], [0, 3]]
+I/flutter ( 4721): []
+I/flutter ( 4721): []
+
 
     */
 
