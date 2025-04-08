@@ -6,6 +6,7 @@ import '../models/station.dart';
 import '../models/station_lat_lng.dart';
 import '../models/train_boarding.dart';
 import '../utility/utility.dart';
+import 'components/dummy_alert.dart';
 import 'components/train_boarding_map_alert.dart';
 import 'parts/train_boarding_dialog.dart';
 
@@ -21,6 +22,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> with ControllersMixin<H
 
   Map<String, List<List<StationLatLng>>> stationLatLngDateMap = <String, List<List<StationLatLng>>>{};
 
+  List<String> stationNameList = [];
+
   ///
   @override
   void initState() {
@@ -35,6 +38,21 @@ class _HomeScreenState extends ConsumerState<HomeScreen> with ControllersMixin<H
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        actions: <Widget>[
+          IconButton(
+            onPressed: () {
+              TrainBoardingDialog(
+                context: context,
+                widget: DummyAlert(
+                  data: stationState.stationNamePrefectureMap,
+                ),
+              );
+            },
+            icon: const Icon(Icons.ac_unit),
+          ),
+        ],
+      ),
       body: SafeArea(
         child: DefaultTextStyle(
           style: const TextStyle(fontSize: 12),
@@ -152,6 +170,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> with ControllersMixin<H
                 if (station != null) {
                   list3.add(StationLatLng(stationName: element2, lat: station.lat, lng: station.lng));
                 }
+
+                stationNameList.add(element2);
               },
             );
 
@@ -232,7 +252,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> with ControllersMixin<H
 
     for (final List<StationLatLng> dailyList in stationLatLngDateList) {
       for (final StationLatLng station in dailyList) {
-
         /*
 
         ①	key	いま数えたい駅名 (station.stationName) をキーにする
