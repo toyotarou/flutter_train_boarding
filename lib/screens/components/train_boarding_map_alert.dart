@@ -138,7 +138,7 @@ I/flutter (12348): [
       backgroundColor: Colors.transparent,
       body: SafeArea(
         child: Stack(
-          children: [
+          children: <Widget>[
             FlutterMap(
               mapController: _mapController,
               options: const MapOptions(initialCenter: LatLng(35.6895, 139.6917), initialZoom: 11),
@@ -153,7 +153,7 @@ I/flutter (12348): [
               ],
             ),
             DefaultTextStyle(
-              style: TextStyle(color: Colors.black),
+              style: const TextStyle(color: Colors.black),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
