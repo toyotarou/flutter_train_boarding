@@ -18,6 +18,8 @@ final _privateConstructorUsedError = UnsupportedError(
 mixin _$StationState {
   Map<String, StationModel> get stationNameMap =>
       throw _privateConstructorUsedError;
+  Map<String, StationModel> get stationNamePrefectureMap =>
+      throw _privateConstructorUsedError;
 
   /// Create a copy of StationState
   /// with the given fields replaced by the non-null parameter values.
@@ -32,7 +34,9 @@ abstract class $StationStateCopyWith<$Res> {
           StationState value, $Res Function(StationState) then) =
       _$StationStateCopyWithImpl<$Res, StationState>;
   @useResult
-  $Res call({Map<String, StationModel> stationNameMap});
+  $Res call(
+      {Map<String, StationModel> stationNameMap,
+      Map<String, StationModel> stationNamePrefectureMap});
 }
 
 /// @nodoc
@@ -51,11 +55,16 @@ class _$StationStateCopyWithImpl<$Res, $Val extends StationState>
   @override
   $Res call({
     Object? stationNameMap = null,
+    Object? stationNamePrefectureMap = null,
   }) {
     return _then(_value.copyWith(
       stationNameMap: null == stationNameMap
           ? _value.stationNameMap
           : stationNameMap // ignore: cast_nullable_to_non_nullable
+              as Map<String, StationModel>,
+      stationNamePrefectureMap: null == stationNamePrefectureMap
+          ? _value.stationNamePrefectureMap
+          : stationNamePrefectureMap // ignore: cast_nullable_to_non_nullable
               as Map<String, StationModel>,
     ) as $Val);
   }
@@ -69,7 +78,9 @@ abstract class _$$StationStateImplCopyWith<$Res>
       __$$StationStateImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({Map<String, StationModel> stationNameMap});
+  $Res call(
+      {Map<String, StationModel> stationNameMap,
+      Map<String, StationModel> stationNamePrefectureMap});
 }
 
 /// @nodoc
@@ -86,11 +97,16 @@ class __$$StationStateImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? stationNameMap = null,
+    Object? stationNamePrefectureMap = null,
   }) {
     return _then(_$StationStateImpl(
       stationNameMap: null == stationNameMap
           ? _value._stationNameMap
           : stationNameMap // ignore: cast_nullable_to_non_nullable
+              as Map<String, StationModel>,
+      stationNamePrefectureMap: null == stationNamePrefectureMap
+          ? _value._stationNamePrefectureMap
+          : stationNamePrefectureMap // ignore: cast_nullable_to_non_nullable
               as Map<String, StationModel>,
     ));
   }
@@ -101,8 +117,11 @@ class __$$StationStateImplCopyWithImpl<$Res>
 class _$StationStateImpl implements _StationState {
   const _$StationStateImpl(
       {final Map<String, StationModel> stationNameMap =
+          const <String, StationModel>{},
+      final Map<String, StationModel> stationNamePrefectureMap =
           const <String, StationModel>{}})
-      : _stationNameMap = stationNameMap;
+      : _stationNameMap = stationNameMap,
+        _stationNamePrefectureMap = stationNamePrefectureMap;
 
   final Map<String, StationModel> _stationNameMap;
   @override
@@ -113,9 +132,19 @@ class _$StationStateImpl implements _StationState {
     return EqualUnmodifiableMapView(_stationNameMap);
   }
 
+  final Map<String, StationModel> _stationNamePrefectureMap;
+  @override
+  @JsonKey()
+  Map<String, StationModel> get stationNamePrefectureMap {
+    if (_stationNamePrefectureMap is EqualUnmodifiableMapView)
+      return _stationNamePrefectureMap;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableMapView(_stationNamePrefectureMap);
+  }
+
   @override
   String toString() {
-    return 'StationState(stationNameMap: $stationNameMap)';
+    return 'StationState(stationNameMap: $stationNameMap, stationNamePrefectureMap: $stationNamePrefectureMap)';
   }
 
   @override
@@ -124,12 +153,16 @@ class _$StationStateImpl implements _StationState {
         (other.runtimeType == runtimeType &&
             other is _$StationStateImpl &&
             const DeepCollectionEquality()
-                .equals(other._stationNameMap, _stationNameMap));
+                .equals(other._stationNameMap, _stationNameMap) &&
+            const DeepCollectionEquality().equals(
+                other._stationNamePrefectureMap, _stationNamePrefectureMap));
   }
 
   @override
   int get hashCode => Object.hash(
-      runtimeType, const DeepCollectionEquality().hash(_stationNameMap));
+      runtimeType,
+      const DeepCollectionEquality().hash(_stationNameMap),
+      const DeepCollectionEquality().hash(_stationNamePrefectureMap));
 
   /// Create a copy of StationState
   /// with the given fields replaced by the non-null parameter values.
@@ -142,10 +175,14 @@ class _$StationStateImpl implements _StationState {
 
 abstract class _StationState implements StationState {
   const factory _StationState(
-      {final Map<String, StationModel> stationNameMap}) = _$StationStateImpl;
+          {final Map<String, StationModel> stationNameMap,
+          final Map<String, StationModel> stationNamePrefectureMap}) =
+      _$StationStateImpl;
 
   @override
   Map<String, StationModel> get stationNameMap;
+  @override
+  Map<String, StationModel> get stationNamePrefectureMap;
 
   /// Create a copy of StationState
   /// with the given fields replaced by the non-null parameter values.
