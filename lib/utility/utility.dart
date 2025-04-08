@@ -66,6 +66,34 @@ class Utility {
 
     return map;
   }
+
+  ///
+  Map<String, Map<String, String>> getDuplicationStationDecisionMap() {
+    return <String, Map<String, String>>{
+      '日本橋': <String, String>{'東京都': ''},
+      '大手町': <String, String>{'東京都': ''},
+      '大門': <String, String>{'東京都': ''},
+      '京橋': <String, String>{'東京都': ''},
+      '三田': <String, String>{'東京都': ''},
+      '落合': <String, String>{'東京都': ''},
+      '町田': <String, String>{'東京都': ''},
+      '西八王子': <String, String>{'東京都': ''},
+      '平井': <String, String>{'東京都': ''},
+      '八丁堀': <String, String>{'東京都': ''},
+      '京急蒲田': <String, String>{'東京都': ''},
+      '多摩川': <String, String>{'東京都': ''},
+      '府中': <String, String>{'東京都': ''},
+      'ときわ台': <String, String>{'東京都': ''},
+      '三郷': <String, String>{'埼玉県': ''},
+      '西船橋': <String, String>{'千葉県': ''},
+      '船橋': <String, String>{'千葉県': ''},
+      '旭': <String, String>{'千葉県': ''},
+      '大倉山': <String, String>{'神奈川県': ''},
+      '星川': <String, String>{'神奈川県': ''},
+      '桜井': <String, String>{'奈良県': ''},
+      '福島': <String, String>{'大阪府': ''},
+    };
+  }
 }
 
 class NavigationService {

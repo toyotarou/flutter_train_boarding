@@ -5,6 +5,7 @@ import '../../data/http/client.dart';
 import '../../extensions/extensions.dart';
 import '../../models/station.dart';
 import '../../utility/utility.dart';
+import '../train_boarding/train_boarding.dart';
 
 part 'station.freezed.dart';
 
@@ -14,7 +15,6 @@ part 'station.g.dart';
 class StationState with _$StationState {
   const factory StationState({
     @Default(<String, StationModel>{}) Map<String, StationModel> stationNameMap,
-    @Default(<String, StationModel>{}) Map<String, StationModel> stationNamePrefectureMap,
   }) = _StationState;
 }
 
@@ -24,7 +24,11 @@ class StationController extends _$StationController {
 
   ///
   @override
-  StationState build() => const StationState();
+  StationState build() {
+    ref.read(trainBoardingControllerProvider.notifier).getAllTrainBoarding();
+
+    return const StationState();
+  }
 
 //============================================== api
 
@@ -37,19 +41,23 @@ class StationController extends _$StationController {
 
       final Map<String, StationModel> map = <String, StationModel>{};
 
-      final Map<String, StationModel> map2 = <String, StationModel>{};
+      final Map<String, Map<String, String>> duplicationStationDecisionMap = utility.getDuplicationStationDecisionMap();
 
       // ignore: avoid_dynamic_calls
       for (int i = 0; i < value.length.toString().toInt(); i++) {
         // ignore: avoid_dynamic_calls
         final StationModel val = StationModel.fromJson(value[i] as Map<String, dynamic>);
 
-        map[val.stationName] = val;
+        if (duplicationStationDecisionMap[val.stationName] != null) {
+          if (duplicationStationDecisionMap[val.stationName]?[val.prefecture] == null) {
+            continue;
+          }
+        }
 
-        map2['${val.stationName}|${val.prefecture}'] = val;
+        map[val.stationName] = val;
       }
 
-      return state.copyWith(stationNameMap: map, stationNamePrefectureMap: map2);
+      return state.copyWith(stationNameMap: map);
     } catch (e) {
       utility.showError('予期せぬエラーが発生しました');
       rethrow; // これにより呼び出し元でキャッチできる
