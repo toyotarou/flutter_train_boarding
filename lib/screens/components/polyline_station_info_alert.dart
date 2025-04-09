@@ -24,14 +24,6 @@ class _PolylineStationInfoAlertState extends State<PolylineStationInfoAlert> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             SizedBox(width: context.screenSize.width),
-            if (widget.soeji0List.contains(widget.index)) ...<Widget>[
-              const SizedBox(height: 10),
-              const Text(
-                '往復',
-                style: TextStyle(color: Colors.yellowAccent),
-              ),
-              const SizedBox(height: 10),
-            ],
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: widget.stations.map(
@@ -40,6 +32,14 @@ class _PolylineStationInfoAlertState extends State<PolylineStationInfoAlert> {
                 },
               ).toList(),
             ),
+            if (widget.soeji0List.contains(widget.index)) ...<Widget>[
+              const SizedBox(height: 10),
+              const Text(
+                '往復',
+                style: TextStyle(color: Colors.yellowAccent),
+              ),
+              const SizedBox(height: 10),
+            ],
           ],
         ),
       ),

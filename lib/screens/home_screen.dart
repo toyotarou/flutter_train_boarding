@@ -180,17 +180,11 @@ class _HomeScreenState extends ConsumerState<HomeScreen> with ControllersMixin<H
                       onTap: () {
                         appParamNotifier.setSelectedStartHome(num: 0);
 
-                        // ignore: prefer_final_locals
-                        ({List<StationLatLng> even, List<StationLatLng> odd}) oddEvenStationList =
-                            makeKisuuGuusuuStationList(stationLatLngDateMap[key] ?? <List<StationLatLng>>[]);
-
                         TrainBoardingDialog(
                           context: context,
                           widget: TrainBoardingMapAlert(
                             date: key,
                             stationLatLngDateList: stationLatLngDateMap[key] ?? <List<StationLatLng>>[],
-                            oddStationList: oddEvenStationList.odd,
-                            evenStationList: oddEvenStationList.even,
                           ),
                         );
                       },
@@ -226,38 +220,38 @@ class _HomeScreenState extends ConsumerState<HomeScreen> with ControllersMixin<H
     );
   }
 
-  ///
-  ({List<StationLatLng> odd, List<StationLatLng> even}) makeKisuuGuusuuStationList(
-      List<List<StationLatLng>> stationLatLngDateList) {
-    final Map<String, int> countMap = <String, int>{};
-    final Map<String, StationLatLng> stationInfoMap = <String, StationLatLng>{};
-
-    for (final List<StationLatLng> dailyList in stationLatLngDateList) {
-      for (final StationLatLng station in dailyList) {
-        /*
-
-        ①	key	いま数えたい駅名 (station.stationName) をキーにする
-        ②	update	その駅名が すでにマップにある 場合に実行される関数。
-        prev は現在格納されている出現回数なので、prev + 1 で 1 増やして返す。
-        ③	ifAbsent	その駅名が まだマップに無い 場合に実行される関数。
-        初回なので出現回数を 1 として返す。
-
-        */
-
-        countMap.update(station.stationName, (int prev) => prev + 1, ifAbsent: () => 1);
-
-        stationInfoMap.putIfAbsent(station.stationName, () => station);
-      }
-    }
-
-    final List<StationLatLng> odd = <StationLatLng>[];
-    final List<StationLatLng> even = <StationLatLng>[];
-
-    for (final MapEntry<String, int> entry in countMap.entries) {
-      final StationLatLng station = stationInfoMap[entry.key]!;
-      (entry.value.isOdd ? odd : even).add(station);
-    }
-
-    return (odd: odd, even: even);
-  }
+// ///
+// ({List<StationLatLng> odd, List<StationLatLng> even}) makeKisuuGuusuuStationList(
+//     List<List<StationLatLng>> stationLatLngDateList) {
+//   final Map<String, int> countMap = <String, int>{};
+//   final Map<String, StationLatLng> stationInfoMap = <String, StationLatLng>{};
+//
+//   for (final List<StationLatLng> dailyList in stationLatLngDateList) {
+//     for (final StationLatLng station in dailyList) {
+//       /*
+//
+//       ①	key	いま数えたい駅名 (station.stationName) をキーにする
+//       ②	update	その駅名が すでにマップにある 場合に実行される関数。
+//       prev は現在格納されている出現回数なので、prev + 1 で 1 増やして返す。
+//       ③	ifAbsent	その駅名が まだマップに無い 場合に実行される関数。
+//       初回なので出現回数を 1 として返す。
+//
+//       */
+//
+//       countMap.update(station.stationName, (int prev) => prev + 1, ifAbsent: () => 1);
+//
+//       stationInfoMap.putIfAbsent(station.stationName, () => station);
+//     }
+//   }
+//
+//   final List<StationLatLng> odd = <StationLatLng>[];
+//   final List<StationLatLng> even = <StationLatLng>[];
+//
+//   for (final MapEntry<String, int> entry in countMap.entries) {
+//     final StationLatLng station = stationInfoMap[entry.key]!;
+//     (entry.value.isOdd ? odd : even).add(station);
+//   }
+//
+//   return (odd: odd, even: even);
+// }
 }

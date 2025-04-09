@@ -13,21 +13,19 @@ import '../../models/station_lat_lng.dart';
 import '../../service/numbered_polylines_service.dart';
 import '../../service/route_pairing_service.dart';
 import '../../utility/tile_provider.dart';
+import '../../utility/utility.dart';
 import '../parts/train_boarding_dialog.dart';
 import 'polyline_station_info_alert.dart';
 
 class TrainBoardingMapAlert extends ConsumerStatefulWidget {
-  const TrainBoardingMapAlert(
-      {super.key,
-      required this.stationLatLngDateList,
-      required this.date,
-      required this.oddStationList,
-      required this.evenStationList});
+  const TrainBoardingMapAlert({
+    super.key,
+    required this.stationLatLngDateList,
+    required this.date,
+  });
 
   final String date;
   final List<List<StationLatLng>> stationLatLngDateList;
-  final List<StationLatLng> oddStationList;
-  final List<StationLatLng> evenStationList;
 
   @override
   ConsumerState<TrainBoardingMapAlert> createState() => _TrainBoardingMapAlertState();
@@ -62,12 +60,49 @@ class _TrainBoardingMapAlertState extends ConsumerState<TrainBoardingMapAlert>
   List<int> soeji0List = <int>[];
   List<int> soeji1List = <int>[];
 
+  Utility utility = Utility();
+
+  double dist0 = 0.0;
+
+  double dist1 = 0.0;
+
   ///
   @override
   void initState() {
     super.initState();
 
     pairingResult = RoutePairingService.pairRoutes(widget.stationLatLngDateList);
+
+    /////////////////////////////////////
+
+    StationLatLng lastStationLatLng = StationLatLng(stationName: '', lat: '', lng: '');
+
+    for (final List<StationLatLng> element in widget.stationLatLngDateList) {
+      for (final StationLatLng element2 in element) {
+        lastStationLatLng = element2;
+      }
+    }
+
+    // ignore: always_specify_types
+    Future(() {
+      dist0 = utility.calculateDistance(
+        LatLng(lastStationLatLng.lat.toDouble(), lastStationLatLng.lng.toDouble()),
+        const LatLng(funabashiLat, funabashiLng),
+      );
+
+      dist1 = utility.calculateDistance(
+        LatLng(lastStationLatLng.lat.toDouble(), lastStationLatLng.lng.toDouble()),
+        const LatLng(zenpukujiLat, zenpukujiLng),
+      );
+
+      if (dist0 < dist1) {
+        appParamNotifier.setSelectedStartHome(num: 0);
+      } else {
+        appParamNotifier.setSelectedStartHome(num: 1);
+      }
+    });
+
+    /////////////////////////////////////
   }
 
   ///
@@ -189,8 +224,6 @@ I/flutter ( 8552): [[Instance of 'StationLatLng', Instance of 'StationLatLng'], 
                 children: <Widget>[
                   Text(widget.date),
                   Text('root num : ${widget.stationLatLngDateList.length}'),
-                  Text('odd length : ${widget.oddStationList.length}'),
-                  Text('even length : ${widget.evenStationList.length}'),
                   Divider(
                     color: Colors.white.withOpacity(0.3),
                     thickness: 5,
@@ -247,54 +280,19 @@ I/flutter ( 8552): [[Instance of 'StationLatLng', Instance of 'StationLatLng'], 
             //
 
             Positioned(
+              top: 10,
               right: 10,
-              child: Column(
-                children: <Widget>[
-                  Container(
-                    decoration: BoxDecoration(
-                      color: Colors.black.withOpacity(0.3),
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: IconButton(
-                      onPressed: () {
-                        appParamNotifier.setSelectedStartHome(num: 0);
-                      },
-                      icon: Icon(
-                        Icons.home,
-                        color: (appParamState.selectedStartHome == 0) ? Colors.redAccent : Colors.white,
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 10),
-                  Container(
-                    decoration: BoxDecoration(
-                      color: Colors.black.withOpacity(0.3),
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: IconButton(
-                      onPressed: () {
-                        appParamNotifier.setSelectedStartHome(num: 1);
-                      },
-                      icon: Icon(
-                        Icons.home,
-                        color: (appParamState.selectedStartHome == 1) ? Colors.redAccent : Colors.white,
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 50),
-                  Container(
-                    decoration: BoxDecoration(
-                      color: Colors.black.withOpacity(0.3),
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: IconButton(
-                      onPressed: () {
-                        setDefaultBoundsMap();
-                      },
-                      icon: const Icon(FontAwesomeIcons.expand, color: Colors.white),
-                    ),
-                  ),
-                ],
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Colors.black.withOpacity(0.3),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: IconButton(
+                  onPressed: () {
+                    setDefaultBoundsMap();
+                  },
+                  icon: const Icon(FontAwesomeIcons.expand, color: Colors.white),
+                ),
               ),
             )
           ],
@@ -310,6 +308,8 @@ I/flutter ( 8552): [[Instance of 'StationLatLng', Instance of 'StationLatLng'], 
     TrainBoardingDialog(
       context: context,
       widget: PolylineStationInfoAlert(index: index, stations: stations, soeji0List: soeji0List),
+      paddingTop: context.screenSize.height * 0.7,
+      clearBarrierColor: true,
     );
   }
 
@@ -335,13 +335,13 @@ I/flutter ( 8552): [[Instance of 'StationLatLng', Instance of 'StationLatLng'], 
     lngList = <double>[];
 
     if (appParamState.selectedStartHome == 0) {
-      latList.add(zenpukujiLat);
-      lngList.add(zenpukujiLng);
+      latList.add(funabashiLat);
+      lngList.add(funabashiLng);
     }
 
     if (appParamState.selectedStartHome == 1) {
-      latList.add(funabashiLat);
-      lngList.add(funabashiLng);
+      latList.add(zenpukujiLat);
+      lngList.add(zenpukujiLng);
     }
 
     for (final List<StationLatLng> element in widget.stationLatLngDateList) {

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:latlong2/latlong.dart';
 
 import '../models/station.dart';
 
@@ -93,6 +94,12 @@ class Utility {
       '桜井': <String, String>{'奈良県': ''},
       '福島': <String, String>{'大阪府': ''},
     };
+  }
+
+  ///
+  double calculateDistance(LatLng p1, LatLng p2) {
+    const Distance distance = Distance();
+    return distance.as(LengthUnit.Meter, p1, p2);
   }
 }
 
