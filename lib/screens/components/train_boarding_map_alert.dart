@@ -13,6 +13,8 @@ import '../../models/station_lat_lng.dart';
 import '../../service/numbered_polylines_service.dart';
 import '../../service/route_pairing_service.dart';
 import '../../utility/tile_provider.dart';
+import '../parts/train_boarding_dialog.dart';
+import 'polyline_station_info_alert.dart';
 
 class TrainBoardingMapAlert extends ConsumerStatefulWidget {
   const TrainBoardingMapAlert(
@@ -305,32 +307,9 @@ I/flutter ( 8552): [[Instance of 'StationLatLng', Instance of 'StationLatLng'], 
   void _onMarkerTap(int index) {
     final List<StationLatLng> stations = polylineSourceList[index];
 
-    // ignore: inference_failure_on_function_invocation
-    showDialog(
+    TrainBoardingDialog(
       context: context,
-      builder: (BuildContext context) => AlertDialog(
-        title: Text('Polyline ${index + 1} Stations'),
-        content: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            SizedBox(width: context.screenSize.width),
-            if (soeji0List.contains(index)) ...<Widget>[
-              const Icon(Icons.ac_unit),
-            ],
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: stations.map(
-                (StationLatLng e) {
-                  return Text(e.stationName);
-                },
-              ).toList(),
-            ),
-          ],
-        ),
-        actions: <Widget>[
-          TextButton(onPressed: () => Navigator.of(context).pop(), child: const Text('Close')),
-        ],
-      ),
+      widget: PolylineStationInfoAlert(index: index, stations: stations, soeji0List: soeji0List),
     );
   }
 
