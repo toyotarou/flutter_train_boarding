@@ -1,13 +1,19 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:latlong2/latlong.dart';
 
+import '../../const/const.dart';
+import '../../controllers/controllers_mixin.dart';
+import '../../extensions/extensions.dart';
 import '../../models/station_lat_lng.dart';
 import '../../service/numbered_polylines_service.dart';
 import '../../service/route_pairing_service.dart';
 import '../../utility/tile_provider.dart';
 
-class TrainBoardingMapAlert extends StatefulWidget {
+class TrainBoardingMapAlert extends ConsumerStatefulWidget {
   const TrainBoardingMapAlert(
       {super.key,
       required this.stationLatLngDateList,
@@ -21,10 +27,11 @@ class TrainBoardingMapAlert extends StatefulWidget {
   final List<StationLatLng> evenStationList;
 
   @override
-  State<TrainBoardingMapAlert> createState() => _TrainBoardingMapAlertState();
+  ConsumerState<TrainBoardingMapAlert> createState() => _TrainBoardingMapAlertState();
 }
 
-class _TrainBoardingMapAlertState extends State<TrainBoardingMapAlert> {
+class _TrainBoardingMapAlertState extends ConsumerState<TrainBoardingMapAlert>
+    with ControllersMixin<TrainBoardingMapAlert> {
   late PairingResult pairingResult;
 
   List<List<StationLatLng>> polylineSourceList = <List<StationLatLng>>[];
@@ -38,6 +45,14 @@ class _TrainBoardingMapAlertState extends State<TrainBoardingMapAlert> {
     Colors.orange,
     Colors.purple,
   ];
+
+  List<double> latList = <double>[];
+  List<double> lngList = <double>[];
+
+  double minLat = 0.0;
+  double maxLat = 0.0;
+  double minLng = 0.0;
+  double maxLng = 0.0;
 
   ///
   @override
@@ -212,6 +227,44 @@ I/flutter (12348): [
                 ],
               ),
             ),
+            Positioned(
+              right: 10,
+              child: Column(
+                children: <Widget>[
+                  Container(
+                    decoration: BoxDecoration(
+                      color: Colors.black.withOpacity(0.3),
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: IconButton(
+                      onPressed: () {
+                        appParamNotifier.setSelectedStartHome(num: 0);
+                      },
+                      icon: Icon(
+                        Icons.home,
+                        color: (appParamState.selectedStartHome == 0) ? Colors.redAccent : Colors.white,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                  Container(
+                    decoration: BoxDecoration(
+                      color: Colors.black.withOpacity(0.3),
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: IconButton(
+                      onPressed: () {
+                        appParamNotifier.setSelectedStartHome(num: 1);
+                      },
+                      icon: Icon(
+                        Icons.home,
+                        color: (appParamState.selectedStartHome == 1) ? Colors.redAccent : Colors.white,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            )
           ],
         ),
       ),
@@ -239,5 +292,35 @@ I/flutter (12348): [
   void _zoom(double delta) {
     final MapCamera cam = _mapController.camera;
     _mapController.move(cam.center, cam.zoom + delta);
+  }
+
+  ///
+  void makeMinMaxLatLng() {
+    latList = <double>[];
+    lngList = <double>[];
+
+    if (appParamState.selectedStartHome == 0) {
+      latList.add(zenpukujiLat);
+      lngList.add(zenpukujiLng);
+    }
+
+    if (appParamState.selectedStartHome == 1) {
+      latList.add(funabashiLat);
+      lngList.add(funabashiLng);
+    }
+
+    for (final List<StationLatLng> element in widget.stationLatLngDateList) {
+      for (final StationLatLng element2 in element) {
+        latList.add(element2.lat.toDouble());
+        lngList.add(element2.lng.toDouble());
+      }
+    }
+
+    if (latList.isNotEmpty && lngList.isNotEmpty) {
+      minLat = latList.reduce(min);
+      maxLat = latList.reduce(max);
+      minLng = lngList.reduce(min);
+      maxLng = lngList.reduce(max);
+    }
   }
 }

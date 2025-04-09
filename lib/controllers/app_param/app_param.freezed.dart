@@ -17,6 +17,7 @@ final _privateConstructorUsedError = UnsupportedError(
 /// @nodoc
 mixin _$AppParamState {
   String get selectedYear => throw _privateConstructorUsedError;
+  int get selectedStartHome => throw _privateConstructorUsedError;
 
   /// Create a copy of AppParamState
   /// with the given fields replaced by the non-null parameter values.
@@ -31,7 +32,7 @@ abstract class $AppParamStateCopyWith<$Res> {
           AppParamState value, $Res Function(AppParamState) then) =
       _$AppParamStateCopyWithImpl<$Res, AppParamState>;
   @useResult
-  $Res call({String selectedYear});
+  $Res call({String selectedYear, int selectedStartHome});
 }
 
 /// @nodoc
@@ -50,12 +51,17 @@ class _$AppParamStateCopyWithImpl<$Res, $Val extends AppParamState>
   @override
   $Res call({
     Object? selectedYear = null,
+    Object? selectedStartHome = null,
   }) {
     return _then(_value.copyWith(
       selectedYear: null == selectedYear
           ? _value.selectedYear
           : selectedYear // ignore: cast_nullable_to_non_nullable
               as String,
+      selectedStartHome: null == selectedStartHome
+          ? _value.selectedStartHome
+          : selectedStartHome // ignore: cast_nullable_to_non_nullable
+              as int,
     ) as $Val);
   }
 }
@@ -68,7 +74,7 @@ abstract class _$$AppParamStateImplCopyWith<$Res>
       __$$AppParamStateImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({String selectedYear});
+  $Res call({String selectedYear, int selectedStartHome});
 }
 
 /// @nodoc
@@ -85,12 +91,17 @@ class __$$AppParamStateImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? selectedYear = null,
+    Object? selectedStartHome = null,
   }) {
     return _then(_$AppParamStateImpl(
       selectedYear: null == selectedYear
           ? _value.selectedYear
           : selectedYear // ignore: cast_nullable_to_non_nullable
               as String,
+      selectedStartHome: null == selectedStartHome
+          ? _value.selectedStartHome
+          : selectedStartHome // ignore: cast_nullable_to_non_nullable
+              as int,
     ));
   }
 }
@@ -98,15 +109,19 @@ class __$$AppParamStateImplCopyWithImpl<$Res>
 /// @nodoc
 
 class _$AppParamStateImpl implements _AppParamState {
-  const _$AppParamStateImpl({this.selectedYear = '-'});
+  const _$AppParamStateImpl(
+      {this.selectedYear = '-', this.selectedStartHome = 0});
 
   @override
   @JsonKey()
   final String selectedYear;
+  @override
+  @JsonKey()
+  final int selectedStartHome;
 
   @override
   String toString() {
-    return 'AppParamState(selectedYear: $selectedYear)';
+    return 'AppParamState(selectedYear: $selectedYear, selectedStartHome: $selectedStartHome)';
   }
 
   @override
@@ -115,11 +130,13 @@ class _$AppParamStateImpl implements _AppParamState {
         (other.runtimeType == runtimeType &&
             other is _$AppParamStateImpl &&
             (identical(other.selectedYear, selectedYear) ||
-                other.selectedYear == selectedYear));
+                other.selectedYear == selectedYear) &&
+            (identical(other.selectedStartHome, selectedStartHome) ||
+                other.selectedStartHome == selectedStartHome));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, selectedYear);
+  int get hashCode => Object.hash(runtimeType, selectedYear, selectedStartHome);
 
   /// Create a copy of AppParamState
   /// with the given fields replaced by the non-null parameter values.
@@ -131,11 +148,14 @@ class _$AppParamStateImpl implements _AppParamState {
 }
 
 abstract class _AppParamState implements AppParamState {
-  const factory _AppParamState({final String selectedYear}) =
-      _$AppParamStateImpl;
+  const factory _AppParamState(
+      {final String selectedYear,
+      final int selectedStartHome}) = _$AppParamStateImpl;
 
   @override
   String get selectedYear;
+  @override
+  int get selectedStartHome;
 
   /// Create a copy of AppParamState
   /// with the given fields replaced by the non-null parameter values.
