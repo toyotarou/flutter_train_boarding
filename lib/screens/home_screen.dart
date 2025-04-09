@@ -178,6 +178,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> with ControllersMixin<H
                     Text(key),
                     GestureDetector(
                       onTap: () {
+                        appParamNotifier.setSelectedStartHome(num: 0);
+
                         // ignore: prefer_final_locals
                         ({List<StationLatLng> even, List<StationLatLng> odd}) oddEvenStationList =
                             makeKisuuGuusuuStationList(stationLatLngDateMap[key] ?? <List<StationLatLng>>[]);

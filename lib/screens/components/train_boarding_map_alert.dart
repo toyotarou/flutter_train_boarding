@@ -57,6 +57,9 @@ class _TrainBoardingMapAlertState extends ConsumerState<TrainBoardingMapAlert>
 
   double? currentZoom;
 
+  List<int> soeji0List = <int>[];
+  List<int> soeji1List = <int>[];
+
   ///
   @override
   void initState() {
@@ -68,15 +71,18 @@ class _TrainBoardingMapAlertState extends ConsumerState<TrainBoardingMapAlert>
   ///
   @override
   Widget build(BuildContext context) {
-    List<int> jogaiList = <int>[];
+    soeji0List = <int>[];
+    soeji1List = <int>[];
+
     if (pairingResult.pairs.isNotEmpty) {
-      jogaiList = pairingResult.pairs.map((List<int> subList) => subList[1]).toList();
+      soeji0List = pairingResult.pairs.map((List<int> subList) => subList[0]).toList();
+      soeji1List = pairingResult.pairs.map((List<int> subList) => subList[1]).toList();
     }
 
     polylineSourceList = widget.stationLatLngDateList
         .asMap()
         .entries
-        .where((MapEntry<int, List<StationLatLng>> entry) => !jogaiList.contains(entry.key))
+        .where((MapEntry<int, List<StationLatLng>> entry) => !soeji1List.contains(entry.key))
         .map((MapEntry<int, List<StationLatLng>> entry) => entry.value)
         .toList();
 
@@ -96,7 +102,8 @@ class _TrainBoardingMapAlertState extends ConsumerState<TrainBoardingMapAlert>
     //
     // print(pairingResult.pairs);
     //
-    // print(jogaiList);
+    // print(soeji0List);
+    // print(soeji1List);
     //
     // print(polylineSourceList);
     //
@@ -104,49 +111,46 @@ class _TrainBoardingMapAlertState extends ConsumerState<TrainBoardingMapAlert>
 
     /*
 
-I/flutter (12348): 下総中山-新小岩-横浜
-I/flutter (12348): ----------
-I/flutter (12348): [[0, 1]]
-I/flutter (12348): [1]
-I/flutter (12348): [[Instance of 'StationLatLng', Instance of 'StationLatLng', Instance of 'StationLatLng']]
+I/flutter ( 8552): 下総中山-新小岩-横浜
+I/flutter ( 8552): ----------
+I/flutter ( 8552): [[0, 1]]
+I/flutter ( 8552): [0]
+I/flutter ( 8552): [1]
+I/flutter ( 8552): [[Instance of 'StationLatLng', Instance of 'StationLatLng', Instance of 'StationLatLng']]
 
 
-I/flutter (12348): 下総中山-秋葉原-駒込
-I/flutter (12348): 駒込-溜池山王-銀座
-I/flutter (12348): 銀座-日本橋-西船橋
-I/flutter (12348): ----------
-I/flutter (12348): []
-I/flutter (12348): []
-I/flutter (12348): [
-  [Instance of 'StationLatLng', Instance of 'StationLatLng', Instance of 'StationLatLng'],
-  [Instance of 'StationLatLng', Instance of 'StationLatLng', Instance of 'StationLatLng'],
-  [Instance of 'StationLatLng', Instance of 'StationLatLng', Instance of 'StationLatLng']
-]
+I/flutter ( 8552): 下総中山-秋葉原-駒込
+I/flutter ( 8552): 駒込-溜池山王-銀座
+I/flutter ( 8552): 銀座-日本橋-西船橋
+I/flutter ( 8552): ----------
+I/flutter ( 8552): []
+I/flutter ( 8552): []
+I/flutter ( 8552): []
+I/flutter ( 8552): [[Instance of 'StationLatLng', Instance of 'StationLatLng', Instance of 'StationLatLng'], [Instance of 'StationLatLng', Instance of 'StationLatLng', Instance of 'StationLatLng'], [Instance of 'StationLatLng', Instance of 'StationLatLng', Instance of 'StationLatLng']]
 
 
-I/flutter (12348): 青梅街道営業所-荻窪-東京
-I/flutter (12348): 東京-新大阪-天王寺
-I/flutter (12348): 阿倍野-天王寺-新大阪-東京
-I/flutter (12348): ----------
-I/flutter (12348): [[0, 3]]
-I/flutter (12348): [3]
-I/flutter (12348): [
-  [Instance of 'StationLatLng', Instance of 'StationLatLng', Instance of 'StationLatLng'],
-  [Instance of 'StationLatLng', Instance of 'StationLatLng', Instance of 'StationLatLng'],
-  [Instance of 'StationLatLng', Instance of 'StationLatLng', Instance of 'StationLatLng', Instance of 'StationLatLng']
-]
+
+2024.10.26
+I/flutter ( 8552): 青梅街道営業所-荻窪-東京
+I/flutter ( 8552): 東京-新大阪-天王寺
+I/flutter ( 8552): 阿倍野-天王寺-新大阪-東京
+I/flutter ( 8552): ----------
+I/flutter ( 8552): [[0, 3]]
+I/flutter ( 8552): [0]
+I/flutter ( 8552): [3]
+I/flutter ( 8552): [[Instance of 'StationLatLng', Instance of 'StationLatLng', Instance of 'StationLatLng'], [Instance of 'StationLatLng', Instance of 'StationLatLng', Instance of 'StationLatLng'], [Instance of 'StationLatLng', Instance of 'StationLatLng', Instance of 'StationLatLng', Instance of 'StationLatLng']]
+
 
 
 2021.09.04
-I/flutter (12348): 京成西船-京成成田
-I/flutter (12348): 成田-香取
-I/flutter (12348): ----------
-I/flutter (12348): [[1, 2], [0, 3]]
-I/flutter (12348): [2, 3]
-I/flutter (12348): [
-  [Instance of 'StationLatLng', Instance of 'StationLatLng'],
-  [Instance of 'StationLatLng', Instance of 'StationLatLng']
-]
+I/flutter ( 8552): 京成西船-京成成田
+I/flutter ( 8552): 成田-香取
+I/flutter ( 8552): ----------
+I/flutter ( 8552): [[1, 2], [0, 3]]
+I/flutter ( 8552): [1, 0]
+I/flutter ( 8552): [2, 3]
+I/flutter ( 8552): [[Instance of 'StationLatLng', Instance of 'StationLatLng'], [Instance of 'StationLatLng', Instance of 'StationLatLng']]
+
 
 
 
@@ -169,7 +173,11 @@ I/flutter (12348): [
                   userAgentPackageName: 'com.example.app',
                 ),
                 NumberedPolylinesWidget(
-                    polylines: polylineSourceList, colors: _polylineColors, onMarkerTap: _onMarkerTap),
+                  polylines: polylineSourceList,
+                  colors: _polylineColors,
+                  onMarkerTap: _onMarkerTap,
+                  soeji0List: soeji0List,
+                ),
               ],
             ),
             DefaultTextStyle(
@@ -219,19 +227,23 @@ I/flutter (12348): [
                 ],
               ),
             ),
-            Positioned(
-              right: 16,
-              bottom: 16,
-              child: Column(
-                children: <Widget>[
-                  FloatingActionButton.small(
-                      heroTag: 'zoomIn', onPressed: () => _zoom(1), child: const Icon(Icons.add)),
-                  const SizedBox(height: 8),
-                  FloatingActionButton.small(
-                      heroTag: 'zoomOut', onPressed: () => _zoom(-1), child: const Icon(Icons.remove)),
-                ],
-              ),
-            ),
+            // Positioned(
+            //   right: 16,
+            //   bottom: 16,
+            //   child: Column(
+            //     children: <Widget>[
+            //       FloatingActionButton.small(
+            //           heroTag: 'zoomIn', onPressed: () => _zoom(1), child: const Icon(Icons.add)),
+            //       const SizedBox(height: 8),
+            //       FloatingActionButton.small(
+            //           heroTag: 'zoomOut', onPressed: () => _zoom(-1), child: const Icon(Icons.remove)),
+            //     ],
+            //   ),
+            // ),
+            //
+            //
+            //
+
             Positioned(
               right: 10,
               child: Column(
@@ -244,8 +256,6 @@ I/flutter (12348): [
                     child: IconButton(
                       onPressed: () {
                         appParamNotifier.setSelectedStartHome(num: 0);
-
-                        setDefaultBoundsMap();
                       },
                       icon: Icon(
                         Icons.home,
@@ -262,8 +272,6 @@ I/flutter (12348): [
                     child: IconButton(
                       onPressed: () {
                         appParamNotifier.setSelectedStartHome(num: 1);
-
-                        setDefaultBoundsMap();
                       },
                       icon: Icon(
                         Icons.home,
@@ -296,13 +304,29 @@ I/flutter (12348): [
   ///
   void _onMarkerTap(int index) {
     final List<StationLatLng> stations = polylineSourceList[index];
-    final String stationNames = stations.map((StationLatLng s) => s.stationName).join('\n'); // 改行区切りに
+
     // ignore: inference_failure_on_function_invocation
     showDialog(
       context: context,
       builder: (BuildContext context) => AlertDialog(
         title: Text('Polyline ${index + 1} Stations'),
-        content: Text(stationNames),
+        content: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            SizedBox(width: context.screenSize.width),
+            if (soeji0List.contains(index)) ...<Widget>[
+              const Icon(Icons.ac_unit),
+            ],
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: stations.map(
+                (StationLatLng e) {
+                  return Text(e.stationName);
+                },
+              ).toList(),
+            ),
+          ],
+        ),
         actions: <Widget>[
           TextButton(onPressed: () => Navigator.of(context).pop(), child: const Text('Close')),
         ],
@@ -310,18 +334,21 @@ I/flutter (12348): [
     );
   }
 
-  ///
-  void _zoom(double delta) {
-    final MapCamera cam = mapController.camera;
-
-    setState(() {
-      currentZoom = cam.zoom + delta;
-    });
-
-    appParamNotifier.setCurrentZoom(zoom: cam.zoom + delta);
-
-    mapController.move(cam.center, cam.zoom + delta);
-  }
+  // ///
+  // void _zoom(double delta) {
+  //   final MapCamera cam = mapController.camera;
+  //
+  //   setState(() {
+  //     currentZoom = cam.zoom + delta;
+  //   });
+  //
+  //   appParamNotifier.setCurrentZoom(zoom: cam.zoom + delta);
+  //
+  //   mapController.move(cam.center, cam.zoom + delta);
+  // }
+  //
+  //
+  //
 
   ///
   void makeMinMaxLatLng() {

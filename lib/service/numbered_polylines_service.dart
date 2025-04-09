@@ -4,7 +4,7 @@ import 'package:latlong2/latlong.dart';
 
 import '../models/station_lat_lng.dart';
 
-class NumberedPolylinesWidget extends StatelessWidget {
+class NumberedPolylinesWidget extends StatefulWidget {
   const NumberedPolylinesWidget({
     super.key,
     required this.polylines,
@@ -13,6 +13,7 @@ class NumberedPolylinesWidget extends StatelessWidget {
     this.lineWidth = 4.0,
     this.textStyle = const TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Colors.white),
     this.iconSize = 30,
+    required this.soeji0List,
   });
 
   final List<List<StationLatLng>> polylines;
@@ -21,10 +22,16 @@ class NumberedPolylinesWidget extends StatelessWidget {
   final double lineWidth;
   final TextStyle textStyle;
   final double iconSize;
+  final List<int> soeji0List;
 
+  @override
+  State<NumberedPolylinesWidget> createState() => _NumberedPolylinesWidgetState();
+}
+
+class _NumberedPolylinesWidgetState extends State<NumberedPolylinesWidget> {
   ///
   List<LatLng> _calculateCenters() {
-    return polylines.map((List<StationLatLng> pts) {
+    return widget.polylines.map((List<StationLatLng> pts) {
       final double latSum = pts.map((StationLatLng s) => double.parse(s.lat)).reduce((double a, double b) => a + b);
       final double lngSum = pts.map((StationLatLng s) => double.parse(s.lng)).reduce((double a, double b) => a + b);
       final int count = pts.length;
@@ -36,12 +43,12 @@ class NumberedPolylinesWidget extends StatelessWidget {
   // ignore: always_specify_types
   List<Polyline> _buildPolylines() {
     return <Polyline<Object>>[
-      for (int i = 0; i < polylines.length; i++)
+      for (int i = 0; i < widget.polylines.length; i++)
         // ignore: always_specify_types
         Polyline(
-          points: polylines[i].map((StationLatLng s) => s.toLatLng).toList(),
-          color: colors[i % colors.length],
-          strokeWidth: lineWidth,
+          points: widget.polylines[i].map((StationLatLng s) => s.toLatLng).toList(),
+          color: widget.colors[i % widget.colors.length],
+          strokeWidth: widget.lineWidth,
         ),
     ];
   }
@@ -57,14 +64,14 @@ class NumberedPolylinesWidget extends StatelessWidget {
           height: 36,
           child: GestureDetector(
             onTap: () {
-              if (onMarkerTap != null) {
-                onMarkerTap!(i);
+              if (widget.onMarkerTap != null) {
+                widget.onMarkerTap!(i);
               }
             },
             child: Container(
               alignment: Alignment.center,
-              decoration: BoxDecoration(color: colors[i].withOpacity(0.9), shape: BoxShape.circle),
-              child: Text('${i + 1}', style: textStyle),
+              decoration: BoxDecoration(color: widget.colors[i].withOpacity(0.9), shape: BoxShape.circle),
+              child: Text('${i + 1}', style: widget.textStyle),
             ),
           ),
         ),
@@ -74,19 +81,29 @@ class NumberedPolylinesWidget extends StatelessWidget {
   ///
   List<Marker> _buildEndpointMarkers() {
     final List<Marker> markers = <Marker>[];
-    for (int i = 0; i < polylines.length; i++) {
-      final List<StationLatLng> pts = polylines[i];
+    for (int i = 0; i < widget.polylines.length; i++) {
+      final List<StationLatLng> pts = widget.polylines[i];
       if (pts.isEmpty) {
         continue;
       }
 
-      // 終点マーカー
+      if (widget.soeji0List.contains(i)) {
+        markers.add(
+          Marker(
+            point: pts.first.toLatLng,
+            width: widget.iconSize,
+            height: widget.iconSize,
+            child: Icon(Icons.flag, color: widget.colors[i].withOpacity(0.9), size: 40),
+          ),
+        );
+      }
+
       markers.add(
         Marker(
           point: pts.last.toLatLng,
-          width: iconSize,
-          height: iconSize,
-          child: Icon(Icons.flag, color: colors[i].withOpacity(0.9),size: 40,),
+          width: widget.iconSize,
+          height: widget.iconSize,
+          child: Icon(Icons.flag, color: widget.colors[i].withOpacity(0.9), size: 40),
         ),
       );
     }
