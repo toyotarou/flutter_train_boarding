@@ -10,6 +10,8 @@ class AppParamState with _$AppParamState {
   const factory AppParamState({
     @Default('-') String selectedYear,
     @Default(0) int selectedStartHome,
+    @Default(5) int currentPaddingIndex,
+    @Default(0) double currentZoom,
   }) = _AppParamState;
 }
 
@@ -24,4 +26,10 @@ class AppParamController extends _$AppParamController {
 
   ///
   void setSelectedStartHome({required int num}) => state = state.copyWith(selectedStartHome: num);
+
+  ///
+  void setCurrentPaddingIndex({required int index}) => state = state.copyWith(currentPaddingIndex: index);
+
+  ///
+  void setCurrentZoom({required double zoom}) => state = state.copyWith(currentZoom: zoom);
 }

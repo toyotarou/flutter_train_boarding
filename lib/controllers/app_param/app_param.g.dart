@@ -7,7 +7,7 @@ part of 'app_param.dart';
 // **************************************************************************
 
 String _$appParamControllerHash() =>
-    r'52c2cd3f3553aae42ffd726080faae785a3f059c';
+    r'580523fc1e0173c8777f2602575ee4bfbcc7048f';
 
 /// See also [AppParamController].
 @ProviderFor(AppParamController)

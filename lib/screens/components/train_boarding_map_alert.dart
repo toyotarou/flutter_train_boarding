@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:latlong2/latlong.dart';
 
 import '../../const/const.dart';
@@ -36,7 +37,7 @@ class _TrainBoardingMapAlertState extends ConsumerState<TrainBoardingMapAlert>
 
   List<List<StationLatLng>> polylineSourceList = <List<StationLatLng>>[];
 
-  final MapController _mapController = MapController();
+  final MapController mapController = MapController();
 
   static final List<Color> _polylineColors = <Color>[
     Colors.blue,
@@ -53,6 +54,8 @@ class _TrainBoardingMapAlertState extends ConsumerState<TrainBoardingMapAlert>
   double maxLat = 0.0;
   double minLng = 0.0;
   double maxLng = 0.0;
+
+  double? currentZoom;
 
   ///
   @override
@@ -149,14 +152,16 @@ I/flutter (12348): [
 
     */
 
+    makeMinMaxLatLng();
+
     return Scaffold(
       backgroundColor: Colors.transparent,
       body: SafeArea(
         child: Stack(
           children: <Widget>[
             FlutterMap(
-              mapController: _mapController,
-              options: const MapOptions(initialCenter: LatLng(35.6895, 139.6917), initialZoom: 11),
+              mapController: mapController,
+              options: const MapOptions(initialCenter: LatLng(zenpukujiLat, zenpukujiLng), initialZoom: 11),
               children: <Widget>[
                 TileLayer(
                   urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
@@ -239,6 +244,8 @@ I/flutter (12348): [
                     child: IconButton(
                       onPressed: () {
                         appParamNotifier.setSelectedStartHome(num: 0);
+
+                        setDefaultBoundsMap();
                       },
                       icon: Icon(
                         Icons.home,
@@ -255,11 +262,26 @@ I/flutter (12348): [
                     child: IconButton(
                       onPressed: () {
                         appParamNotifier.setSelectedStartHome(num: 1);
+
+                        setDefaultBoundsMap();
                       },
                       icon: Icon(
                         Icons.home,
                         color: (appParamState.selectedStartHome == 1) ? Colors.redAccent : Colors.white,
                       ),
+                    ),
+                  ),
+                  const SizedBox(height: 50),
+                  Container(
+                    decoration: BoxDecoration(
+                      color: Colors.black.withOpacity(0.3),
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: IconButton(
+                      onPressed: () {
+                        setDefaultBoundsMap();
+                      },
+                      icon: const Icon(FontAwesomeIcons.expand, color: Colors.white),
                     ),
                   ),
                 ],
@@ -290,8 +312,15 @@ I/flutter (12348): [
 
   ///
   void _zoom(double delta) {
-    final MapCamera cam = _mapController.camera;
-    _mapController.move(cam.center, cam.zoom + delta);
+    final MapCamera cam = mapController.camera;
+
+    setState(() {
+      currentZoom = cam.zoom + delta;
+    });
+
+    appParamNotifier.setCurrentZoom(zoom: cam.zoom + delta);
+
+    mapController.move(cam.center, cam.zoom + delta);
   }
 
   ///
@@ -322,5 +351,41 @@ I/flutter (12348): [
       minLng = lngList.reduce(min);
       maxLng = lngList.reduce(max);
     }
+  }
+
+  ///
+  void setDefaultBoundsMap() {
+    // if (gStateList.length > 1) {
+    //   if (appParamState.mapType == MapType.monthDays) {
+    //     final List<double> monthDaysLatList = <double>[];
+    //     final List<double> monthDaysLngList = <double>[];
+    //
+    //     for (final GeolocModel element in gStateList) {
+    //       monthDaysLatList.add(element.latitude.toDouble());
+    //       monthDaysLngList.add(element.longitude.toDouble());
+    //     }
+    //
+    //     minLat = monthDaysLatList.reduce(min);
+    //     maxLat = monthDaysLatList.reduce(max);
+    //     minLng = monthDaysLngList.reduce(min);
+    //     maxLng = monthDaysLngList.reduce(max);
+    //   }
+    //
+    final LatLngBounds bounds = LatLngBounds.fromPoints(<LatLng>[LatLng(minLat, maxLng), LatLng(maxLat, minLng)]);
+
+    final CameraFit cameraFit =
+        CameraFit.bounds(bounds: bounds, padding: EdgeInsets.all(appParamState.currentPaddingIndex * 10));
+
+    mapController.fitCamera(cameraFit);
+
+    /// これは残しておく
+    // final LatLng newCenter = mapController.camera.center;
+
+    final double newZoom = mapController.camera.zoom;
+
+    setState(() => currentZoom = newZoom);
+
+    appParamNotifier.setCurrentZoom(zoom: newZoom);
+    // }
   }
 }

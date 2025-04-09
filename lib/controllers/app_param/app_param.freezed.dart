@@ -18,6 +18,8 @@ final _privateConstructorUsedError = UnsupportedError(
 mixin _$AppParamState {
   String get selectedYear => throw _privateConstructorUsedError;
   int get selectedStartHome => throw _privateConstructorUsedError;
+  int get currentPaddingIndex => throw _privateConstructorUsedError;
+  double get currentZoom => throw _privateConstructorUsedError;
 
   /// Create a copy of AppParamState
   /// with the given fields replaced by the non-null parameter values.
@@ -32,7 +34,11 @@ abstract class $AppParamStateCopyWith<$Res> {
           AppParamState value, $Res Function(AppParamState) then) =
       _$AppParamStateCopyWithImpl<$Res, AppParamState>;
   @useResult
-  $Res call({String selectedYear, int selectedStartHome});
+  $Res call(
+      {String selectedYear,
+      int selectedStartHome,
+      int currentPaddingIndex,
+      double currentZoom});
 }
 
 /// @nodoc
@@ -52,6 +58,8 @@ class _$AppParamStateCopyWithImpl<$Res, $Val extends AppParamState>
   $Res call({
     Object? selectedYear = null,
     Object? selectedStartHome = null,
+    Object? currentPaddingIndex = null,
+    Object? currentZoom = null,
   }) {
     return _then(_value.copyWith(
       selectedYear: null == selectedYear
@@ -62,6 +70,14 @@ class _$AppParamStateCopyWithImpl<$Res, $Val extends AppParamState>
           ? _value.selectedStartHome
           : selectedStartHome // ignore: cast_nullable_to_non_nullable
               as int,
+      currentPaddingIndex: null == currentPaddingIndex
+          ? _value.currentPaddingIndex
+          : currentPaddingIndex // ignore: cast_nullable_to_non_nullable
+              as int,
+      currentZoom: null == currentZoom
+          ? _value.currentZoom
+          : currentZoom // ignore: cast_nullable_to_non_nullable
+              as double,
     ) as $Val);
   }
 }
@@ -74,7 +90,11 @@ abstract class _$$AppParamStateImplCopyWith<$Res>
       __$$AppParamStateImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({String selectedYear, int selectedStartHome});
+  $Res call(
+      {String selectedYear,
+      int selectedStartHome,
+      int currentPaddingIndex,
+      double currentZoom});
 }
 
 /// @nodoc
@@ -92,6 +112,8 @@ class __$$AppParamStateImplCopyWithImpl<$Res>
   $Res call({
     Object? selectedYear = null,
     Object? selectedStartHome = null,
+    Object? currentPaddingIndex = null,
+    Object? currentZoom = null,
   }) {
     return _then(_$AppParamStateImpl(
       selectedYear: null == selectedYear
@@ -102,6 +124,14 @@ class __$$AppParamStateImplCopyWithImpl<$Res>
           ? _value.selectedStartHome
           : selectedStartHome // ignore: cast_nullable_to_non_nullable
               as int,
+      currentPaddingIndex: null == currentPaddingIndex
+          ? _value.currentPaddingIndex
+          : currentPaddingIndex // ignore: cast_nullable_to_non_nullable
+              as int,
+      currentZoom: null == currentZoom
+          ? _value.currentZoom
+          : currentZoom // ignore: cast_nullable_to_non_nullable
+              as double,
     ));
   }
 }
@@ -110,7 +140,10 @@ class __$$AppParamStateImplCopyWithImpl<$Res>
 
 class _$AppParamStateImpl implements _AppParamState {
   const _$AppParamStateImpl(
-      {this.selectedYear = '-', this.selectedStartHome = 0});
+      {this.selectedYear = '-',
+      this.selectedStartHome = 0,
+      this.currentPaddingIndex = 5,
+      this.currentZoom = 0});
 
   @override
   @JsonKey()
@@ -118,10 +151,16 @@ class _$AppParamStateImpl implements _AppParamState {
   @override
   @JsonKey()
   final int selectedStartHome;
+  @override
+  @JsonKey()
+  final int currentPaddingIndex;
+  @override
+  @JsonKey()
+  final double currentZoom;
 
   @override
   String toString() {
-    return 'AppParamState(selectedYear: $selectedYear, selectedStartHome: $selectedStartHome)';
+    return 'AppParamState(selectedYear: $selectedYear, selectedStartHome: $selectedStartHome, currentPaddingIndex: $currentPaddingIndex, currentZoom: $currentZoom)';
   }
 
   @override
@@ -132,11 +171,16 @@ class _$AppParamStateImpl implements _AppParamState {
             (identical(other.selectedYear, selectedYear) ||
                 other.selectedYear == selectedYear) &&
             (identical(other.selectedStartHome, selectedStartHome) ||
-                other.selectedStartHome == selectedStartHome));
+                other.selectedStartHome == selectedStartHome) &&
+            (identical(other.currentPaddingIndex, currentPaddingIndex) ||
+                other.currentPaddingIndex == currentPaddingIndex) &&
+            (identical(other.currentZoom, currentZoom) ||
+                other.currentZoom == currentZoom));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, selectedYear, selectedStartHome);
+  int get hashCode => Object.hash(runtimeType, selectedYear, selectedStartHome,
+      currentPaddingIndex, currentZoom);
 
   /// Create a copy of AppParamState
   /// with the given fields replaced by the non-null parameter values.
@@ -150,12 +194,18 @@ class _$AppParamStateImpl implements _AppParamState {
 abstract class _AppParamState implements AppParamState {
   const factory _AppParamState(
       {final String selectedYear,
-      final int selectedStartHome}) = _$AppParamStateImpl;
+      final int selectedStartHome,
+      final int currentPaddingIndex,
+      final double currentZoom}) = _$AppParamStateImpl;
 
   @override
   String get selectedYear;
   @override
   int get selectedStartHome;
+  @override
+  int get currentPaddingIndex;
+  @override
+  double get currentZoom;
 
   /// Create a copy of AppParamState
   /// with the given fields replaced by the non-null parameter values.
