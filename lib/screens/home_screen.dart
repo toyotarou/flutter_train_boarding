@@ -29,6 +29,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> with ControllersMixin<H
     trainBoardingNotifier.getAllTrainBoarding();
 
     stationNotifier.getAllStation();
+
+    trainNotifier.getAllTrain();
   }
 
   ///

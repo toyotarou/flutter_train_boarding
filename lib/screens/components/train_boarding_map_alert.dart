@@ -123,76 +123,6 @@ class _TrainBoardingMapAlertState extends ConsumerState<TrainBoardingMapAlert>
         .map((MapEntry<int, List<StationLatLng>> entry) => entry.value)
         .toList();
 
-    // ////////////////////////
-    //
-    // for (final List<StationLatLng> element in polylineSourceList) {
-    //   final List<String> staList = <String>[];
-    //
-    //   for (final StationLatLng element2 in element) {
-    //     staList.add(element2.stationName);
-    //   }
-    //
-    //   print(staList.join('-'));
-    // }
-    //
-    // print('----------');
-    //
-    // print(pairingResult.pairs);
-    //
-    // print(soeji0List);
-    // print(soeji1List);
-    //
-    // print(polylineSourceList);
-    //
-    // ////////////////////////
-
-    /*
-
-I/flutter ( 8552): 下総中山-新小岩-横浜
-I/flutter ( 8552): ----------
-I/flutter ( 8552): [[0, 1]]
-I/flutter ( 8552): [0]
-I/flutter ( 8552): [1]
-I/flutter ( 8552): [[Instance of 'StationLatLng', Instance of 'StationLatLng', Instance of 'StationLatLng']]
-
-
-I/flutter ( 8552): 下総中山-秋葉原-駒込
-I/flutter ( 8552): 駒込-溜池山王-銀座
-I/flutter ( 8552): 銀座-日本橋-西船橋
-I/flutter ( 8552): ----------
-I/flutter ( 8552): []
-I/flutter ( 8552): []
-I/flutter ( 8552): []
-I/flutter ( 8552): [[Instance of 'StationLatLng', Instance of 'StationLatLng', Instance of 'StationLatLng'], [Instance of 'StationLatLng', Instance of 'StationLatLng', Instance of 'StationLatLng'], [Instance of 'StationLatLng', Instance of 'StationLatLng', Instance of 'StationLatLng']]
-
-
-
-2024.10.26
-I/flutter ( 8552): 青梅街道営業所-荻窪-東京
-I/flutter ( 8552): 東京-新大阪-天王寺
-I/flutter ( 8552): 阿倍野-天王寺-新大阪-東京
-I/flutter ( 8552): ----------
-I/flutter ( 8552): [[0, 3]]
-I/flutter ( 8552): [0]
-I/flutter ( 8552): [3]
-I/flutter ( 8552): [[Instance of 'StationLatLng', Instance of 'StationLatLng', Instance of 'StationLatLng'], [Instance of 'StationLatLng', Instance of 'StationLatLng', Instance of 'StationLatLng'], [Instance of 'StationLatLng', Instance of 'StationLatLng', Instance of 'StationLatLng', Instance of 'StationLatLng']]
-
-
-
-2021.09.04
-I/flutter ( 8552): 京成西船-京成成田
-I/flutter ( 8552): 成田-香取
-I/flutter ( 8552): ----------
-I/flutter ( 8552): [[1, 2], [0, 3]]
-I/flutter ( 8552): [1, 0]
-I/flutter ( 8552): [2, 3]
-I/flutter ( 8552): [[Instance of 'StationLatLng', Instance of 'StationLatLng'], [Instance of 'StationLatLng', Instance of 'StationLatLng']]
-
-
-
-
-    */
-
     makeMinMaxLatLng();
 
     return Scaffold(
@@ -262,23 +192,6 @@ I/flutter ( 8552): [[Instance of 'StationLatLng', Instance of 'StationLatLng'], 
                 ],
               ),
             ),
-            // Positioned(
-            //   right: 16,
-            //   bottom: 16,
-            //   child: Column(
-            //     children: <Widget>[
-            //       FloatingActionButton.small(
-            //           heroTag: 'zoomIn', onPressed: () => _zoom(1), child: const Icon(Icons.add)),
-            //       const SizedBox(height: 8),
-            //       FloatingActionButton.small(
-            //           heroTag: 'zoomOut', onPressed: () => _zoom(-1), child: const Icon(Icons.remove)),
-            //     ],
-            //   ),
-            // ),
-            //
-            //
-            //
-
             Positioned(
               top: 10,
               right: 10,
@@ -316,30 +229,10 @@ I/flutter ( 8552): [[Instance of 'StationLatLng', Instance of 'StationLatLng'], 
 
         stationNameTrainNumberMap: stationState.stationNameTrainNumberMap,
       ),
-      // paddingTop: context.screenSize.height * 0.7,
-      //
-      //
-      //
-
+      paddingTop: context.screenSize.height * 0.7,
       clearBarrierColor: true,
     );
   }
-
-  // ///
-  // void _zoom(double delta) {
-  //   final MapCamera cam = mapController.camera;
-  //
-  //   setState(() {
-  //     currentZoom = cam.zoom + delta;
-  //   });
-  //
-  //   appParamNotifier.setCurrentZoom(zoom: cam.zoom + delta);
-  //
-  //   mapController.move(cam.center, cam.zoom + delta);
-  // }
-  //
-  //
-  //
 
   ///
   void makeMinMaxLatLng() {
@@ -373,22 +266,6 @@ I/flutter ( 8552): [[Instance of 'StationLatLng', Instance of 'StationLatLng'], 
 
   ///
   void setDefaultBoundsMap() {
-    // if (gStateList.length > 1) {
-    //   if (appParamState.mapType == MapType.monthDays) {
-    //     final List<double> monthDaysLatList = <double>[];
-    //     final List<double> monthDaysLngList = <double>[];
-    //
-    //     for (final GeolocModel element in gStateList) {
-    //       monthDaysLatList.add(element.latitude.toDouble());
-    //       monthDaysLngList.add(element.longitude.toDouble());
-    //     }
-    //
-    //     minLat = monthDaysLatList.reduce(min);
-    //     maxLat = monthDaysLatList.reduce(max);
-    //     minLng = monthDaysLngList.reduce(min);
-    //     maxLng = monthDaysLngList.reduce(max);
-    //   }
-    //
     final LatLngBounds bounds = LatLngBounds.fromPoints(<LatLng>[LatLng(minLat, maxLng), LatLng(maxLat, minLng)]);
 
     final CameraFit cameraFit =

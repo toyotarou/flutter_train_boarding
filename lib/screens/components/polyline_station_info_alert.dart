@@ -27,6 +27,7 @@ class PolylineStationInfoAlert extends ConsumerStatefulWidget {
 
 class _PolylineStationInfoAlertState extends ConsumerState<PolylineStationInfoAlert>
     with ControllersMixin<PolylineStationInfoAlert> {
+  ///
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -58,13 +59,12 @@ class _PolylineStationInfoAlertState extends ConsumerState<PolylineStationInfoAl
     widget.stations.asMap().entries.forEach((MapEntry<int, StationLatLng> element) {
       list.add(
         Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             const SizedBox(width: 10),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Text(element.value.stationName, style: const TextStyle(fontSize: 20)),
-              ],
+              children: <Widget>[Text(element.value.stationName, style: const TextStyle(fontSize: 20))],
             ),
             const SizedBox(width: 10),
           ],
@@ -80,7 +80,8 @@ class _PolylineStationInfoAlertState extends ConsumerState<PolylineStationInfoAl
 
     return SizedBox(
       height: 40,
-      child: SingleChildScrollView(scrollDirection: Axis.horizontal, child: Row(children: list)),
+      child: SingleChildScrollView(
+          scrollDirection: Axis.horizontal, child: Row(crossAxisAlignment: CrossAxisAlignment.start, children: list)),
     );
   }
 
@@ -94,17 +95,17 @@ class _PolylineStationInfoAlertState extends ConsumerState<PolylineStationInfoAl
         final List<String>? sntnmBefore = widget.stationNameTrainNumberMap[widget.stations[i - 1].stationName];
         final List<String>? sntnmThis = widget.stationNameTrainNumberMap[widget.stations[i].stationName];
 
+        String trainNumber = '';
+
         sntnmBefore?.forEach((String element) {
           sntnmThis?.forEach((String element2) {
             if (element == element2) {
-              trainNumberList.add(element);
+              trainNumber = element;
             }
           });
         });
 
-        if (trainNumberList.isEmpty || !trainNumberList.contains('0')) {
-          trainNumberList.add('0');
-        }
+        trainNumberList.add((trainNumber != '') ? trainNumber : '0');
       }
     }
 
@@ -113,37 +114,33 @@ class _PolylineStationInfoAlertState extends ConsumerState<PolylineStationInfoAl
     final List<Widget> list = <Widget>[];
 
     list.add(
-      Container(
-        decoration: BoxDecoration(border: Border(bottom: BorderSide(color: Colors.white.withOpacity(0.3)))),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            SizedBox(width: context.screenSize.width),
-            DefaultTextStyle(
-              style: const TextStyle(color: Colors.yellowAccent),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: trainNumberList.map(
-                  (String e) {
-                    return Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        Text(e),
-                        Text((trainState.trainModelMap[e] != null) ? trainState.trainModelMap[e]!.trainName : ''),
-                      ],
-                    );
-                  },
-                ).toList(),
-              ),
-            ),
-          ],
+      Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 10),
+        child: DefaultTextStyle(
+          style: const TextStyle(fontSize: 20),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: trainNumberList.map(
+              (String e) {
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Text(
+                      (e == '0')
+                          ? 'バス'
+                          : (trainState.trainModelMap[e] == null)
+                              ? ''
+                              : trainState.trainModelMap[e]!.trainName,
+                    ),
+                  ],
+                );
+              },
+            ).toList(),
+          ),
         ),
       ),
     );
 
-    return SizedBox(
-      height: 400,
-      child: SingleChildScrollView(child: Column(children: list)),
-    );
+    return SizedBox(height: 80, child: SingleChildScrollView(child: Column(children: list)));
   }
 }
