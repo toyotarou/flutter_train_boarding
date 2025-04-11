@@ -5,11 +5,19 @@ import '../../extensions/extensions.dart';
 import '../../models/station_lat_lng.dart';
 
 class PolylineStationInfoAlert extends StatefulWidget {
-  const PolylineStationInfoAlert({super.key, required this.stations, required this.index, required this.soeji0List});
+  const PolylineStationInfoAlert(
+      {super.key,
+      required this.stations,
+      required this.index,
+      required this.soeji0List,
+      required this.stationNameIdMap,
+      required this.trainNumberStationIdMap});
 
   final int index;
   final List<StationLatLng> stations;
   final List<int> soeji0List;
+  final Map<String, List<int>> stationNameIdMap;
+  final Map<String, List<int>> trainNumberStationIdMap;
 
   @override
   State<PolylineStationInfoAlert> createState() => _PolylineStationInfoAlertState();
@@ -48,7 +56,22 @@ class _PolylineStationInfoAlertState extends State<PolylineStationInfoAlert> {
         Row(
           children: <Widget>[
             const SizedBox(width: 10),
-            Text(element.value.stationName, style: const TextStyle(fontSize: 20)),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Text(element.value.stationName, style: const TextStyle(fontSize: 20)),
+                if (widget.stationNameIdMap[element.value.stationName] != null) ...<Widget>[
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: widget.stationNameIdMap[element.value.stationName]!.map(
+                      (int e) {
+                        return Text(e.toString());
+                      },
+                    ).toList(),
+                  ),
+                ],
+              ],
+            ),
             const SizedBox(width: 10),
           ],
         ),

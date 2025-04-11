@@ -18,6 +18,10 @@ final _privateConstructorUsedError = UnsupportedError(
 mixin _$StationState {
   Map<String, StationModel> get stationNameMap =>
       throw _privateConstructorUsedError;
+  Map<String, List<int>> get stationNameIdMap =>
+      throw _privateConstructorUsedError;
+  Map<String, List<int>> get trainNumberStationIdMap =>
+      throw _privateConstructorUsedError;
 
   /// Create a copy of StationState
   /// with the given fields replaced by the non-null parameter values.
@@ -32,7 +36,10 @@ abstract class $StationStateCopyWith<$Res> {
           StationState value, $Res Function(StationState) then) =
       _$StationStateCopyWithImpl<$Res, StationState>;
   @useResult
-  $Res call({Map<String, StationModel> stationNameMap});
+  $Res call(
+      {Map<String, StationModel> stationNameMap,
+      Map<String, List<int>> stationNameIdMap,
+      Map<String, List<int>> trainNumberStationIdMap});
 }
 
 /// @nodoc
@@ -51,12 +58,22 @@ class _$StationStateCopyWithImpl<$Res, $Val extends StationState>
   @override
   $Res call({
     Object? stationNameMap = null,
+    Object? stationNameIdMap = null,
+    Object? trainNumberStationIdMap = null,
   }) {
     return _then(_value.copyWith(
       stationNameMap: null == stationNameMap
           ? _value.stationNameMap
           : stationNameMap // ignore: cast_nullable_to_non_nullable
               as Map<String, StationModel>,
+      stationNameIdMap: null == stationNameIdMap
+          ? _value.stationNameIdMap
+          : stationNameIdMap // ignore: cast_nullable_to_non_nullable
+              as Map<String, List<int>>,
+      trainNumberStationIdMap: null == trainNumberStationIdMap
+          ? _value.trainNumberStationIdMap
+          : trainNumberStationIdMap // ignore: cast_nullable_to_non_nullable
+              as Map<String, List<int>>,
     ) as $Val);
   }
 }
@@ -69,7 +86,10 @@ abstract class _$$StationStateImplCopyWith<$Res>
       __$$StationStateImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({Map<String, StationModel> stationNameMap});
+  $Res call(
+      {Map<String, StationModel> stationNameMap,
+      Map<String, List<int>> stationNameIdMap,
+      Map<String, List<int>> trainNumberStationIdMap});
 }
 
 /// @nodoc
@@ -86,12 +106,22 @@ class __$$StationStateImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? stationNameMap = null,
+    Object? stationNameIdMap = null,
+    Object? trainNumberStationIdMap = null,
   }) {
     return _then(_$StationStateImpl(
       stationNameMap: null == stationNameMap
           ? _value._stationNameMap
           : stationNameMap // ignore: cast_nullable_to_non_nullable
               as Map<String, StationModel>,
+      stationNameIdMap: null == stationNameIdMap
+          ? _value._stationNameIdMap
+          : stationNameIdMap // ignore: cast_nullable_to_non_nullable
+              as Map<String, List<int>>,
+      trainNumberStationIdMap: null == trainNumberStationIdMap
+          ? _value._trainNumberStationIdMap
+          : trainNumberStationIdMap // ignore: cast_nullable_to_non_nullable
+              as Map<String, List<int>>,
     ));
   }
 }
@@ -101,8 +131,14 @@ class __$$StationStateImplCopyWithImpl<$Res>
 class _$StationStateImpl implements _StationState {
   const _$StationStateImpl(
       {final Map<String, StationModel> stationNameMap =
-          const <String, StationModel>{}})
-      : _stationNameMap = stationNameMap;
+          const <String, StationModel>{},
+      final Map<String, List<int>> stationNameIdMap =
+          const <String, List<int>>{},
+      final Map<String, List<int>> trainNumberStationIdMap =
+          const <String, List<int>>{}})
+      : _stationNameMap = stationNameMap,
+        _stationNameIdMap = stationNameIdMap,
+        _trainNumberStationIdMap = trainNumberStationIdMap;
 
   final Map<String, StationModel> _stationNameMap;
   @override
@@ -113,9 +149,28 @@ class _$StationStateImpl implements _StationState {
     return EqualUnmodifiableMapView(_stationNameMap);
   }
 
+  final Map<String, List<int>> _stationNameIdMap;
+  @override
+  @JsonKey()
+  Map<String, List<int>> get stationNameIdMap {
+    if (_stationNameIdMap is EqualUnmodifiableMapView) return _stationNameIdMap;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableMapView(_stationNameIdMap);
+  }
+
+  final Map<String, List<int>> _trainNumberStationIdMap;
+  @override
+  @JsonKey()
+  Map<String, List<int>> get trainNumberStationIdMap {
+    if (_trainNumberStationIdMap is EqualUnmodifiableMapView)
+      return _trainNumberStationIdMap;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableMapView(_trainNumberStationIdMap);
+  }
+
   @override
   String toString() {
-    return 'StationState(stationNameMap: $stationNameMap)';
+    return 'StationState(stationNameMap: $stationNameMap, stationNameIdMap: $stationNameIdMap, trainNumberStationIdMap: $trainNumberStationIdMap)';
   }
 
   @override
@@ -124,12 +179,19 @@ class _$StationStateImpl implements _StationState {
         (other.runtimeType == runtimeType &&
             other is _$StationStateImpl &&
             const DeepCollectionEquality()
-                .equals(other._stationNameMap, _stationNameMap));
+                .equals(other._stationNameMap, _stationNameMap) &&
+            const DeepCollectionEquality()
+                .equals(other._stationNameIdMap, _stationNameIdMap) &&
+            const DeepCollectionEquality().equals(
+                other._trainNumberStationIdMap, _trainNumberStationIdMap));
   }
 
   @override
   int get hashCode => Object.hash(
-      runtimeType, const DeepCollectionEquality().hash(_stationNameMap));
+      runtimeType,
+      const DeepCollectionEquality().hash(_stationNameMap),
+      const DeepCollectionEquality().hash(_stationNameIdMap),
+      const DeepCollectionEquality().hash(_trainNumberStationIdMap));
 
   /// Create a copy of StationState
   /// with the given fields replaced by the non-null parameter values.
@@ -142,10 +204,17 @@ class _$StationStateImpl implements _StationState {
 
 abstract class _StationState implements StationState {
   const factory _StationState(
-      {final Map<String, StationModel> stationNameMap}) = _$StationStateImpl;
+          {final Map<String, StationModel> stationNameMap,
+          final Map<String, List<int>> stationNameIdMap,
+          final Map<String, List<int>> trainNumberStationIdMap}) =
+      _$StationStateImpl;
 
   @override
   Map<String, StationModel> get stationNameMap;
+  @override
+  Map<String, List<int>> get stationNameIdMap;
+  @override
+  Map<String, List<int>> get trainNumberStationIdMap;
 
   /// Create a copy of StationState
   /// with the given fields replaced by the non-null parameter values.

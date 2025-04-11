@@ -307,8 +307,14 @@ I/flutter ( 8552): [[Instance of 'StationLatLng', Instance of 'StationLatLng'], 
 
     TrainBoardingDialog(
       context: context,
-      widget: PolylineStationInfoAlert(index: index, stations: stations, soeji0List: soeji0List),
-      paddingTop: context.screenSize.height * 0.7,
+      widget: PolylineStationInfoAlert(
+        index: index,
+        stations: stations,
+        soeji0List: soeji0List,
+        stationNameIdMap: stationState.stationNameIdMap,
+        trainNumberStationIdMap: stationState.trainNumberStationIdMap,
+      ),
+      paddingTop: context.screenSize.height * 0.5,
       clearBarrierColor: true,
     );
   }
