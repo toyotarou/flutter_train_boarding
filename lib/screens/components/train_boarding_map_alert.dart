@@ -222,6 +222,8 @@ class _TrainBoardingMapAlertState extends ConsumerState<TrainBoardingMapAlert>
 
   ///
   void _onMarkerTap(int index) {
+    mapController.rotate(0);
+
     final List<StationLatLng> stations = polylineSourceList[index];
 
     TrainBoardingDialog(
@@ -230,12 +232,10 @@ class _TrainBoardingMapAlertState extends ConsumerState<TrainBoardingMapAlert>
         index: index,
         stations: stations,
         soeji0List: soeji0List,
-        // stationNameIdMap: stationState.stationNameIdMap,
-        // trainNumberStationIdMap: stationState.trainNumberStationIdMap,
-
         stationNameTrainNumberMap: stationState.stationNameTrainNumberMap,
+        geolocModelList: geolocState.allGeolocMap[widget.date] ?? <GeolocModel>[],
       ),
-      paddingTop: context.screenSize.height * 0.7,
+      paddingTop: context.screenSize.height * 0.6,
       clearBarrierColor: true,
     );
   }

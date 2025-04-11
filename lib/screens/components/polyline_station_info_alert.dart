@@ -1,10 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:latlong2/latlong.dart';
 
 import '../../controllers/controllers_mixin.dart';
 import '../../extensions/extensions.dart';
+import '../../models/geoloc.dart';
 import '../../models/station_lat_lng.dart';
+import '../../utility/utility.dart';
+import '../parts/train_boarding_dialog.dart';
+import 'geoloc_time_display_alert.dart';
 
 class PolylineStationInfoAlert extends ConsumerStatefulWidget {
   const PolylineStationInfoAlert({
@@ -13,13 +18,14 @@ class PolylineStationInfoAlert extends ConsumerStatefulWidget {
     required this.index,
     required this.soeji0List,
     required this.stationNameTrainNumberMap,
+    required this.geolocModelList,
   });
 
   final int index;
   final List<StationLatLng> stations;
   final List<int> soeji0List;
-
   final Map<String, List<String>> stationNameTrainNumberMap;
+  final List<GeolocModel> geolocModelList;
 
   @override
   ConsumerState<PolylineStationInfoAlert> createState() => _PolylineStationInfoAlertState();
@@ -27,6 +33,8 @@ class PolylineStationInfoAlert extends ConsumerStatefulWidget {
 
 class _PolylineStationInfoAlertState extends ConsumerState<PolylineStationInfoAlert>
     with ControllersMixin<PolylineStationInfoAlert> {
+  Utility utility = Utility();
+
   ///
   @override
   Widget build(BuildContext context) {
@@ -56,7 +64,9 @@ class _PolylineStationInfoAlertState extends ConsumerState<PolylineStationInfoAl
 
     final int flag = (widget.soeji0List.contains(widget.index)) ? 2 : 1;
 
-    widget.stations.asMap().entries.forEach((MapEntry<int, StationLatLng> element) {
+    for (int i = 0; i < widget.stations.length; i++) {
+      final List<String> geolocTimeList = getGeolocTimeList(station: widget.stations[i]);
+
       list.add(
         Row(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -64,22 +74,40 @@ class _PolylineStationInfoAlertState extends ConsumerState<PolylineStationInfoAl
             const SizedBox(width: 10),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[Text(element.value.stationName, style: const TextStyle(fontSize: 20))],
+              children: <Widget>[
+                Text(widget.stations[i].stationName, style: const TextStyle(fontSize: 20)),
+                if (geolocTimeList.isNotEmpty) ...<Widget>[
+                  const SizedBox(height: 10),
+                  GestureDetector(
+                    onTap: () {
+                      TrainBoardingDialog(
+                        context: context,
+                        widget: GeolocTimeDisplayAlert(geolocTimeList: geolocTimeList),
+                        paddingTop: context.screenSize.height * 0.1,
+                        paddingBottom: context.screenSize.height * 0.5,
+                        paddingLeft: context.screenSize.width * 0.6,
+                        clearBarrierColor: true,
+                      );
+                    },
+                    child: Icon(Icons.timer, color: Colors.white.withOpacity(0.6)),
+                  ),
+                ],
+              ],
             ),
             const SizedBox(width: 10),
           ],
         ),
       );
 
-      if (element.key < widget.stations.length - 1) {
+      if (i < widget.stations.length - 1) {
         list.add(
           (flag == 2) ? const Icon(FontAwesomeIcons.arrowRightArrowLeft) : const Icon(FontAwesomeIcons.arrowRight),
         );
       }
-    });
+    }
 
     return SizedBox(
-      height: 40,
+      height: 80,
       child: SingleChildScrollView(
           scrollDirection: Axis.horizontal, child: Row(crossAxisAlignment: CrossAxisAlignment.start, children: list)),
     );
@@ -142,5 +170,25 @@ class _PolylineStationInfoAlertState extends ConsumerState<PolylineStationInfoAl
     );
 
     return SizedBox(height: 80, child: SingleChildScrollView(child: Column(children: list)));
+  }
+
+  ///
+  List<String> getGeolocTimeList({required StationLatLng station}) {
+    final List<String> distTimeList = <String>[];
+
+    for (final GeolocModel element in widget.geolocModelList) {
+      final double dist0 = utility.calculateDistance(
+        LatLng(station.lat.toDouble(), station.lng.toDouble()),
+        LatLng(element.latitude.toDouble(), element.longitude.toDouble()),
+      );
+
+      if (dist0 < 200) {
+        distTimeList.add(element.time);
+      }
+    }
+
+    distTimeList.sort();
+
+    return distTimeList;
   }
 }
