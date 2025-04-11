@@ -15,8 +15,7 @@ part 'station.g.dart';
 class StationState with _$StationState {
   const factory StationState({
     @Default(<String, StationModel>{}) Map<String, StationModel> stationNameMap,
-    @Default(<String, List<int>>{}) Map<String, List<int>> stationNameIdMap,
-    @Default(<String, List<int>>{}) Map<String, List<int>> trainNumberStationIdMap,
+    @Default(<String, List<String>>{}) Map<String, List<String>> stationNameTrainNumberMap,
   }) = _StationState;
 }
 
@@ -59,16 +58,14 @@ class StationController extends _$StationController {
         map[val.stationName] = val;
       }
 
-      final Map<String, List<int>> map2 = <String, List<int>>{};
-      final Map<String, List<int>> map3 = <String, List<int>>{};
+      final Map<String, List<String>> map2 = <String, List<String>>{};
 
       // ignore: avoid_dynamic_calls
       for (int i = 0; i < value.length.toString().toInt(); i++) {
         // ignore: avoid_dynamic_calls
         final StationModel val = StationModel.fromJson(value[i] as Map<String, dynamic>);
 
-        map2[val.stationName] = <int>[];
-        map3[val.trainNumber] = <int>[];
+        map2[val.stationName] = <String>[];
       }
 
       // ignore: avoid_dynamic_calls
@@ -76,11 +73,10 @@ class StationController extends _$StationController {
         // ignore: avoid_dynamic_calls
         final StationModel val = StationModel.fromJson(value[i] as Map<String, dynamic>);
 
-        map2[val.stationName]?.add(val.id);
-        map3[val.trainNumber]?.add(val.id);
+        map2[val.stationName]?.add(val.trainNumber);
       }
 
-      return state.copyWith(stationNameMap: map, stationNameIdMap: map2, trainNumberStationIdMap: map3);
+      return state.copyWith(stationNameMap: map, stationNameTrainNumberMap: map2);
     } catch (e) {
       utility.showError('予期せぬエラーが発生しました');
       rethrow; // これにより呼び出し元でキャッチできる

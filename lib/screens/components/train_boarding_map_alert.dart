@@ -311,10 +311,16 @@ I/flutter ( 8552): [[Instance of 'StationLatLng', Instance of 'StationLatLng'], 
         index: index,
         stations: stations,
         soeji0List: soeji0List,
-        stationNameIdMap: stationState.stationNameIdMap,
-        trainNumberStationIdMap: stationState.trainNumberStationIdMap,
+        // stationNameIdMap: stationState.stationNameIdMap,
+        // trainNumberStationIdMap: stationState.trainNumberStationIdMap,
+
+        stationNameTrainNumberMap: stationState.stationNameTrainNumberMap,
       ),
-      paddingTop: context.screenSize.height * 0.5,
+      // paddingTop: context.screenSize.height * 0.7,
+      //
+      //
+      //
+
       clearBarrierColor: true,
     );
   }

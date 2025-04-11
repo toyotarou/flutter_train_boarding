@@ -6,7 +6,7 @@ part of 'train.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$trainControllerHash() => r'147996a6a204bbe8e2afc233300b1950b3317013';
+String _$trainControllerHash() => r'352a286dddddac165ec2e601b45a814ae13956e5';
 
 /// See also [TrainController].
 @ProviderFor(TrainController)
