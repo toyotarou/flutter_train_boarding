@@ -17,12 +17,7 @@ final _privateConstructorUsedError = UnsupportedError(
 /// @nodoc
 mixin _$StationState {
   Map<String, StationModel> get stationNameMap =>
-      throw _privateConstructorUsedError; // @Default(<String, List<int>>{}) Map<String, List<int>> stationNameIdMap,
-// @Default(<String, List<int>>{}) Map<String, List<int>> trainNumberStationIdMap,
-//
-//
-//
-//
+      throw _privateConstructorUsedError;
   Map<String, List<String>> get stationNameTrainNumberMap =>
       throw _privateConstructorUsedError;
 
@@ -137,19 +132,7 @@ class _$StationStateImpl implements _StationState {
     return EqualUnmodifiableMapView(_stationNameMap);
   }
 
-// @Default(<String, List<int>>{}) Map<String, List<int>> stationNameIdMap,
-// @Default(<String, List<int>>{}) Map<String, List<int>> trainNumberStationIdMap,
-//
-//
-//
-//
   final Map<String, List<String>> _stationNameTrainNumberMap;
-// @Default(<String, List<int>>{}) Map<String, List<int>> stationNameIdMap,
-// @Default(<String, List<int>>{}) Map<String, List<int>> trainNumberStationIdMap,
-//
-//
-//
-//
   @override
   @JsonKey()
   Map<String, List<String>> get stationNameTrainNumberMap {
@@ -197,13 +180,7 @@ abstract class _StationState implements StationState {
       _$StationStateImpl;
 
   @override
-  Map<String, StationModel>
-      get stationNameMap; // @Default(<String, List<int>>{}) Map<String, List<int>> stationNameIdMap,
-// @Default(<String, List<int>>{}) Map<String, List<int>> trainNumberStationIdMap,
-//
-//
-//
-//
+  Map<String, StationModel> get stationNameMap;
   @override
   Map<String, List<String>> get stationNameTrainNumberMap;
 

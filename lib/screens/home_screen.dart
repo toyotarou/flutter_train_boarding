@@ -31,6 +31,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> with ControllersMixin<H
     stationNotifier.getAllStation();
 
     trainNotifier.getAllTrain();
+
+    geolocNotifier.getAllGeoloc();
   }
 
   ///
@@ -132,7 +134,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> with ControllersMixin<H
 
                 displayList3.add(
                   Container(
-                    width: 120,
+                    width: 160,
                     margin: const EdgeInsets.all(2),
                     padding: const EdgeInsets.all(2),
                     decoration: BoxDecoration(
@@ -142,7 +144,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> with ControllersMixin<H
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
-                        Text(element2),
+                        Text(element2, maxLines: 1, overflow: TextOverflow.ellipsis),
                         const SizedBox(height: 10),
                         Text((station != null) ? station.lat : '-----'),
                         Text((station != null) ? station.lng : '-----'),

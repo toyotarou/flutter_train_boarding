@@ -9,6 +9,7 @@ import 'package:latlong2/latlong.dart';
 import '../../const/const.dart';
 import '../../controllers/controllers_mixin.dart';
 import '../../extensions/extensions.dart';
+import '../../models/geoloc.dart';
 import '../../models/station_lat_lng.dart';
 import '../../service/numbered_polylines_service.dart';
 import '../../service/route_pairing_service.dart';
@@ -65,6 +66,8 @@ class _TrainBoardingMapAlertState extends ConsumerState<TrainBoardingMapAlert>
   double dist0 = 0.0;
 
   double dist1 = 0.0;
+
+  List<Marker> markerList = <Marker>[];
 
   ///
   @override
@@ -125,6 +128,8 @@ class _TrainBoardingMapAlertState extends ConsumerState<TrainBoardingMapAlert>
 
     makeMinMaxLatLng();
 
+    makeGeolocMarkers();
+
     return Scaffold(
       backgroundColor: Colors.transparent,
       body: SafeArea(
@@ -139,6 +144,7 @@ class _TrainBoardingMapAlertState extends ConsumerState<TrainBoardingMapAlert>
                   tileProvider: CachedTileProvider(),
                   userAgentPackageName: 'com.example.app',
                 ),
+                MarkerLayer(markers: markerList),
                 NumberedPolylinesWidget(
                   polylines: polylineSourceList,
                   colors: _polylineColors,
@@ -282,5 +288,25 @@ class _TrainBoardingMapAlertState extends ConsumerState<TrainBoardingMapAlert>
 
     appParamNotifier.setCurrentZoom(zoom: newZoom);
     // }
+  }
+
+  ///
+  void makeGeolocMarkers() {
+    markerList = <Marker>[];
+
+    final List<GeolocModel>? dateGeoloc = geolocState.allGeolocMap[widget.date];
+
+    if (dateGeoloc != null) {
+      for (final GeolocModel element in dateGeoloc) {
+        markerList.add(
+          Marker(
+            point: LatLng(element.latitude.toDouble(), element.longitude.toDouble()),
+            width: 40,
+            height: 40,
+            child: const Icon(Icons.ac_unit, size: 20, color: Colors.black),
+          ),
+        );
+      }
+    }
   }
 }
