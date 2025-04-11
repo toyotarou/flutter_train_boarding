@@ -85,7 +85,7 @@ class _PolylineStationInfoAlertState extends State<PolylineStationInfoAlert> {
     });
 
     return SizedBox(
-      height: 40,
+      height: 200,
       child: SingleChildScrollView(scrollDirection: Axis.horizontal, child: Row(children: list)),
     );
   }

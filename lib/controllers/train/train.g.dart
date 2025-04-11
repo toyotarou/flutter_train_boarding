@@ -1,26 +1,26 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'station.dart';
+part of 'train.dart';
 
 // **************************************************************************
 // RiverpodGenerator
 // **************************************************************************
 
-String _$stationControllerHash() => r'd8819faddfe1fb5945f83442f8b210c44b9c56bd';
+String _$trainControllerHash() => r'147996a6a204bbe8e2afc233300b1950b3317013';
 
-/// See also [StationController].
-@ProviderFor(StationController)
-final stationControllerProvider =
-    NotifierProvider<StationController, StationState>.internal(
-  StationController.new,
-  name: r'stationControllerProvider',
+/// See also [TrainController].
+@ProviderFor(TrainController)
+final trainControllerProvider =
+    NotifierProvider<TrainController, TrainState>.internal(
+  TrainController.new,
+  name: r'trainControllerProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
       ? null
-      : _$stationControllerHash,
+      : _$trainControllerHash,
   dependencies: null,
   allTransitiveDependencies: null,
 );
 
-typedef _$StationController = Notifier<StationState>;
+typedef _$TrainController = Notifier<TrainState>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package
