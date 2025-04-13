@@ -21,6 +21,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> with ControllersMixin<H
 
   Map<String, List<List<StationLatLng>>> stationLatLngDateMap = <String, List<List<StationLatLng>>>{};
 
+  List<String> trainBoardingList = <String>[];
+
   ///
   @override
   void initState() {
@@ -39,6 +41,49 @@ class _HomeScreenState extends ConsumerState<HomeScreen> with ControllersMixin<H
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        actions: <Widget>[
+          IconButton(
+            onPressed: () {
+              for (final String element in trainBoardingList) {
+                final List<String> exElement = element.split('-');
+
+                for (int i = 1; i < exElement.length; i++) {
+                  final List<String>? sntnmBefore = stationState.stationNameTrainNumberMap[exElement[i - 1]];
+                  final List<String>? sntnmThis = stationState.stationNameTrainNumberMap[exElement[i]];
+
+                  String trainNumber = '';
+
+                  sntnmBefore?.forEach((String element) {
+                    sntnmThis?.forEach((String element2) {
+                      if (element == element2) {
+                        trainNumber = element;
+                      }
+                    });
+                  });
+
+                  if (trainNumber == '') {
+                    if ((exElement[i - 1] == '上野' && exElement[i] == '長野') ||
+                        (exElement[i - 1] == '長野' && exElement[i] == '上野')) {
+                    } else if ((exElement[i - 1] == '東京' && exElement[i] == '新大阪') ||
+                        (exElement[i - 1] == '新大阪' && exElement[i] == '東京')) {
+                    } else if ((exElement[i - 1] == '宮島口' && exElement[i] == '宮島') ||
+                        (exElement[i - 1] == '宮島' && exElement[i] == '宮島口')) {
+                    } else if ((exElement[i - 1] == '宮島' && exElement[i] == '広島港') ||
+                        (exElement[i - 1] == '広島港' && exElement[i] == '宮島')) {
+                    } else {
+                      print(exElement[i - 1]);
+                      print(exElement[i]);
+                      print('-------------------');
+                    }
+                  }
+                }
+              }
+            },
+            icon: const Icon(Icons.check_box),
+          ),
+        ],
+      ),
       body: SafeArea(
         child: DefaultTextStyle(
           style: const TextStyle(fontSize: 12),
@@ -122,6 +167,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> with ControllersMixin<H
 
         value.station.split('\r\n').forEach((String element) {
           if (element.trim() != '') {
+            trainBoardingList.add(element.trim());
+
             final List<Widget> displayList3 = <Widget>[];
 
             final List<StationLatLng> list3 = <StationLatLng>[];

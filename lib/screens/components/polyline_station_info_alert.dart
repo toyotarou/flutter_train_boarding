@@ -120,20 +120,34 @@ class _PolylineStationInfoAlertState extends ConsumerState<PolylineStationInfoAl
 
     for (int i = 0; i < widget.stations.length; i++) {
       if (i > 0) {
-        final List<String>? sntnmBefore = widget.stationNameTrainNumberMap[widget.stations[i - 1].stationName];
-        final List<String>? sntnmThis = widget.stationNameTrainNumberMap[widget.stations[i].stationName];
+        if ((widget.stations[i - 1].stationName == '上野' && widget.stations[i].stationName == '長野') ||
+            (widget.stations[i - 1].stationName == '長野' && widget.stations[i].stationName == '上野')) {
+          trainNumberList.add('99999999');
+        } else if ((widget.stations[i - 1].stationName == '東京' && widget.stations[i].stationName == '新大阪') ||
+            (widget.stations[i - 1].stationName == '新大阪' && widget.stations[i].stationName == '東京')) {
+          trainNumberList.add('99999998');
+        } else if ((widget.stations[i - 1].stationName == '宮島口' && widget.stations[i].stationName == '宮島') ||
+            (widget.stations[i - 1].stationName == '宮島' && widget.stations[i].stationName == '宮島口')) {
+          trainNumberList.add('99999997');
+        } else if ((widget.stations[i - 1].stationName == '宮島' && widget.stations[i].stationName == '広島港') ||
+            (widget.stations[i - 1].stationName == '広島港' && widget.stations[i].stationName == '宮島')) {
+          trainNumberList.add('99999996');
+        } else {
+          final List<String>? sntnmBefore = widget.stationNameTrainNumberMap[widget.stations[i - 1].stationName];
+          final List<String>? sntnmThis = widget.stationNameTrainNumberMap[widget.stations[i].stationName];
 
-        String trainNumber = '';
+          String trainNumber = '';
 
-        sntnmBefore?.forEach((String element) {
-          sntnmThis?.forEach((String element2) {
-            if (element == element2) {
-              trainNumber = element;
-            }
+          sntnmBefore?.forEach((String element) {
+            sntnmThis?.forEach((String element2) {
+              if (element == element2) {
+                trainNumber = element;
+              }
+            });
           });
-        });
 
-        trainNumberList.add((trainNumber != '') ? trainNumber : '0');
+          trainNumberList.add((trainNumber != '') ? trainNumber : '0');
+        }
       }
     }
 
@@ -153,13 +167,7 @@ class _PolylineStationInfoAlertState extends ConsumerState<PolylineStationInfoAl
                 return Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    Text(
-                      (e == '0')
-                          ? 'バス'
-                          : (trainState.trainModelMap[e] == null)
-                              ? ''
-                              : trainState.trainModelMap[e]!.trainName,
-                    ),
+                    Text(getDisplayTrainName(trainNumber: e)),
                   ],
                 );
               },
@@ -170,6 +178,24 @@ class _PolylineStationInfoAlertState extends ConsumerState<PolylineStationInfoAl
     );
 
     return SizedBox(height: 80, child: SingleChildScrollView(child: Column(children: list)));
+  }
+
+  ///
+  String getDisplayTrainName({required String trainNumber}) {
+    switch (trainNumber) {
+      case '0':
+        return 'バス';
+      case '99999999':
+        return '北陸新幹線';
+      case '99999998':
+        return '東海道新幹線';
+      case '99999997':
+        return '西日本宮島フェリー';
+      case '99999996':
+        return '西日本宮島フェリー';
+      default:
+        return trainState.trainModelMap[trainNumber]!.trainName;
+    }
   }
 
   ///
