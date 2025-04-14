@@ -12,6 +12,7 @@ class AppParamState with _$AppParamState {
     @Default(0) int selectedStartHome,
     @Default(5) int currentPaddingIndex,
     @Default(0) double currentZoom,
+    @Default('') String selectedTrainNumber,
   }) = _AppParamState;
 }
 
@@ -32,4 +33,8 @@ class AppParamController extends _$AppParamController {
 
   ///
   void setCurrentZoom({required double zoom}) => state = state.copyWith(currentZoom: zoom);
+
+  ///
+  void setSelectedTrainNumber({required String trainNumber}) =>
+      state = state.copyWith(selectedTrainNumber: trainNumber);
 }

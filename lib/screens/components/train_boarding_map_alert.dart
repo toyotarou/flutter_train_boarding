@@ -10,6 +10,7 @@ import '../../const/const.dart';
 import '../../controllers/controllers_mixin.dart';
 import '../../extensions/extensions.dart';
 import '../../models/geoloc.dart';
+import '../../models/station.dart';
 import '../../models/station_lat_lng.dart';
 import '../../service/numbered_polylines_service.dart';
 import '../../service/route_pairing_service.dart';
@@ -68,6 +69,8 @@ class _TrainBoardingMapAlertState extends ConsumerState<TrainBoardingMapAlert>
   double dist1 = 0.0;
 
   List<Marker> markerList = <Marker>[];
+
+  List<Marker> markerList2 = <Marker>[];
 
   ///
   @override
@@ -130,6 +133,8 @@ class _TrainBoardingMapAlertState extends ConsumerState<TrainBoardingMapAlert>
 
     makeGeolocMarkers();
 
+    makeStationMarkers();
+
     return Scaffold(
       backgroundColor: Colors.transparent,
       body: SafeArea(
@@ -144,6 +149,9 @@ class _TrainBoardingMapAlertState extends ConsumerState<TrainBoardingMapAlert>
                   tileProvider: CachedTileProvider(),
                   userAgentPackageName: 'com.example.app',
                 ),
+                if (appParamState.selectedTrainNumber != '') ...<Widget>[
+                  MarkerLayer(markers: markerList2),
+                ],
                 MarkerLayer(markers: markerList),
                 NumberedPolylinesWidget(
                   polylines: polylineSourceList,
@@ -208,6 +216,8 @@ class _TrainBoardingMapAlertState extends ConsumerState<TrainBoardingMapAlert>
                 ),
                 child: IconButton(
                   onPressed: () {
+                    mapController.rotate(0);
+
                     setDefaultBoundsMap();
                   },
                   icon: const Icon(FontAwesomeIcons.expand, color: Colors.white),
@@ -222,8 +232,6 @@ class _TrainBoardingMapAlertState extends ConsumerState<TrainBoardingMapAlert>
 
   ///
   void _onMarkerTap(int index) {
-    mapController.rotate(0);
-
     final List<StationLatLng> stations = polylineSourceList[index];
 
     TrainBoardingDialog(
@@ -307,6 +315,26 @@ class _TrainBoardingMapAlertState extends ConsumerState<TrainBoardingMapAlert>
           ),
         );
       }
+    }
+  }
+
+  ///
+  void makeStationMarkers() {
+    markerList2 = <Marker>[];
+
+    if (appParamState.selectedTrainNumber != '') {
+      stationState.stationNameMap.forEach((String key, StationModel value) {
+        if (appParamState.selectedTrainNumber == value.trainNumber) {
+          markerList2.add(
+            Marker(
+              point: LatLng(value.lat.toDouble(), value.lng.toDouble()),
+              width: 40,
+              height: 40,
+              child: const Icon(Icons.location_on, size: 20, color: Colors.green),
+            ),
+          );
+        }
+      });
     }
   }
 }

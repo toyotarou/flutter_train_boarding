@@ -20,6 +20,7 @@ mixin _$AppParamState {
   int get selectedStartHome => throw _privateConstructorUsedError;
   int get currentPaddingIndex => throw _privateConstructorUsedError;
   double get currentZoom => throw _privateConstructorUsedError;
+  String get selectedTrainNumber => throw _privateConstructorUsedError;
 
   /// Create a copy of AppParamState
   /// with the given fields replaced by the non-null parameter values.
@@ -38,7 +39,8 @@ abstract class $AppParamStateCopyWith<$Res> {
       {String selectedYear,
       int selectedStartHome,
       int currentPaddingIndex,
-      double currentZoom});
+      double currentZoom,
+      String selectedTrainNumber});
 }
 
 /// @nodoc
@@ -60,6 +62,7 @@ class _$AppParamStateCopyWithImpl<$Res, $Val extends AppParamState>
     Object? selectedStartHome = null,
     Object? currentPaddingIndex = null,
     Object? currentZoom = null,
+    Object? selectedTrainNumber = null,
   }) {
     return _then(_value.copyWith(
       selectedYear: null == selectedYear
@@ -78,6 +81,10 @@ class _$AppParamStateCopyWithImpl<$Res, $Val extends AppParamState>
           ? _value.currentZoom
           : currentZoom // ignore: cast_nullable_to_non_nullable
               as double,
+      selectedTrainNumber: null == selectedTrainNumber
+          ? _value.selectedTrainNumber
+          : selectedTrainNumber // ignore: cast_nullable_to_non_nullable
+              as String,
     ) as $Val);
   }
 }
@@ -94,7 +101,8 @@ abstract class _$$AppParamStateImplCopyWith<$Res>
       {String selectedYear,
       int selectedStartHome,
       int currentPaddingIndex,
-      double currentZoom});
+      double currentZoom,
+      String selectedTrainNumber});
 }
 
 /// @nodoc
@@ -114,6 +122,7 @@ class __$$AppParamStateImplCopyWithImpl<$Res>
     Object? selectedStartHome = null,
     Object? currentPaddingIndex = null,
     Object? currentZoom = null,
+    Object? selectedTrainNumber = null,
   }) {
     return _then(_$AppParamStateImpl(
       selectedYear: null == selectedYear
@@ -132,6 +141,10 @@ class __$$AppParamStateImplCopyWithImpl<$Res>
           ? _value.currentZoom
           : currentZoom // ignore: cast_nullable_to_non_nullable
               as double,
+      selectedTrainNumber: null == selectedTrainNumber
+          ? _value.selectedTrainNumber
+          : selectedTrainNumber // ignore: cast_nullable_to_non_nullable
+              as String,
     ));
   }
 }
@@ -143,7 +156,8 @@ class _$AppParamStateImpl implements _AppParamState {
       {this.selectedYear = '-',
       this.selectedStartHome = 0,
       this.currentPaddingIndex = 5,
-      this.currentZoom = 0});
+      this.currentZoom = 0,
+      this.selectedTrainNumber = ''});
 
   @override
   @JsonKey()
@@ -157,10 +171,13 @@ class _$AppParamStateImpl implements _AppParamState {
   @override
   @JsonKey()
   final double currentZoom;
+  @override
+  @JsonKey()
+  final String selectedTrainNumber;
 
   @override
   String toString() {
-    return 'AppParamState(selectedYear: $selectedYear, selectedStartHome: $selectedStartHome, currentPaddingIndex: $currentPaddingIndex, currentZoom: $currentZoom)';
+    return 'AppParamState(selectedYear: $selectedYear, selectedStartHome: $selectedStartHome, currentPaddingIndex: $currentPaddingIndex, currentZoom: $currentZoom, selectedTrainNumber: $selectedTrainNumber)';
   }
 
   @override
@@ -175,12 +192,14 @@ class _$AppParamStateImpl implements _AppParamState {
             (identical(other.currentPaddingIndex, currentPaddingIndex) ||
                 other.currentPaddingIndex == currentPaddingIndex) &&
             (identical(other.currentZoom, currentZoom) ||
-                other.currentZoom == currentZoom));
+                other.currentZoom == currentZoom) &&
+            (identical(other.selectedTrainNumber, selectedTrainNumber) ||
+                other.selectedTrainNumber == selectedTrainNumber));
   }
 
   @override
   int get hashCode => Object.hash(runtimeType, selectedYear, selectedStartHome,
-      currentPaddingIndex, currentZoom);
+      currentPaddingIndex, currentZoom, selectedTrainNumber);
 
   /// Create a copy of AppParamState
   /// with the given fields replaced by the non-null parameter values.
@@ -196,7 +215,8 @@ abstract class _AppParamState implements AppParamState {
       {final String selectedYear,
       final int selectedStartHome,
       final int currentPaddingIndex,
-      final double currentZoom}) = _$AppParamStateImpl;
+      final double currentZoom,
+      final String selectedTrainNumber}) = _$AppParamStateImpl;
 
   @override
   String get selectedYear;
@@ -206,6 +226,8 @@ abstract class _AppParamState implements AppParamState {
   int get currentPaddingIndex;
   @override
   double get currentZoom;
+  @override
+  String get selectedTrainNumber;
 
   /// Create a copy of AppParamState
   /// with the given fields replaced by the non-null parameter values.

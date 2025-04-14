@@ -164,11 +164,30 @@ class _PolylineStationInfoAlertState extends ConsumerState<PolylineStationInfoAl
             crossAxisAlignment: CrossAxisAlignment.start,
             children: trainNumberList.map(
               (String e) {
-                return Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Text(getDisplayTrainName(trainNumber: e)),
-                  ],
+                return Container(
+                  decoration: BoxDecoration(border: Border(bottom: BorderSide(color: Colors.white.withOpacity(0.3)))),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      Text(getDisplayTrainName(trainNumber: e)),
+                      if (e == '0')
+                        Container()
+                      else
+                        GestureDetector(
+                          onTap: () {
+                            if (e == appParamState.selectedTrainNumber) {
+                              appParamNotifier.setSelectedTrainNumber(trainNumber: '');
+                            } else {
+                              appParamNotifier.setSelectedTrainNumber(trainNumber: e);
+                            }
+                          },
+                          child: Icon(
+                            Icons.train,
+                            color: (e == appParamState.selectedTrainNumber) ? Colors.yellowAccent : Colors.white,
+                          ),
+                        ),
+                    ],
+                  ),
                 );
               },
             ).toList(),

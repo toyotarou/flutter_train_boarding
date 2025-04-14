@@ -6,6 +6,7 @@ import '../models/station.dart';
 import '../models/station_lat_lng.dart';
 import '../models/train_boarding.dart';
 import '../utility/utility.dart';
+import 'components/not_match_train_name_display_alert.dart';
 import 'components/train_boarding_map_alert.dart';
 import 'parts/train_boarding_dialog.dart';
 
@@ -45,6 +46,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> with ControllersMixin<H
         actions: <Widget>[
           IconButton(
             onPressed: () {
+              final List<Map<String, String>> notMatchTrainNameMapList = <Map<String, String>>[];
+
               for (final String element in trainBoardingList) {
                 final List<String> exElement = element.split('-');
 
@@ -72,13 +75,17 @@ class _HomeScreenState extends ConsumerState<HomeScreen> with ControllersMixin<H
                     } else if ((exElement[i - 1] == '宮島' && exElement[i] == '広島港') ||
                         (exElement[i - 1] == '広島港' && exElement[i] == '宮島')) {
                     } else {
-                      print(exElement[i - 1]);
-                      print(exElement[i]);
-                      print('-------------------');
+                      notMatchTrainNameMapList
+                          .add(<String, String>{'fromStation': exElement[i - 1], 'toStation': exElement[i]});
                     }
                   }
                 }
               }
+
+              TrainBoardingDialog(
+                context: context,
+                widget: NotMatchTrainNameDisplayAlert(notMatchTrainNameMapList: notMatchTrainNameMapList),
+              );
             },
             icon: const Icon(Icons.check_box),
           ),
