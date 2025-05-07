@@ -32,6 +32,8 @@ dependencies:
   flutter_cache_manager: ^3.4.1
   scroll_to_index: ^3.0.1
 
+  supabase_flutter: ^2.8.4
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

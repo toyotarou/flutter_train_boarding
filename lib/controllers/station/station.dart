@@ -4,6 +4,8 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 import '../../data/http/client.dart';
 import '../../extensions/extensions.dart';
 import '../../models/station.dart';
+import '../../supabase/dup_spot/dup_spot_model.dart';
+import '../../supabase/dup_spot/dup_spot_repository.dart';
 import '../../utility/utility.dart';
 import '../train_boarding/train_boarding.dart';
 
@@ -42,7 +44,13 @@ class StationController extends _$StationController {
 
       final Map<String, StationModel> map = <String, StationModel>{};
 
-      final Map<String, Map<String, String>> duplicationStationDecisionMap = utility.getDuplicationStationDecisionMap();
+      final Map<String, Map<String, String>> duplicationStationDecisionMap = <String, Map<String, String>>{};
+
+      await DupSpotRepository().getSupabaseDupSpotNameLimit().then((List<DupSpotModel> value) {
+        for (final DupSpotModel element in value) {
+          duplicationStationDecisionMap[element.name] = <String, String>{element.area: ''};
+        }
+      });
 
       // ignore: avoid_dynamic_calls
       for (int i = 0; i < value.length.toString().toInt(); i++) {

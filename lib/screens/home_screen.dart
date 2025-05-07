@@ -5,6 +5,8 @@ import '../controllers/controllers_mixin.dart';
 import '../models/station.dart';
 import '../models/station_lat_lng.dart';
 import '../models/train_boarding.dart';
+import '../supabase/bus_info/bus_info_model.dart';
+import '../supabase/bus_info/bus_info_repository.dart';
 import '../utility/utility.dart';
 import 'components/not_match_train_name_display_alert.dart';
 import 'components/train_boarding_map_alert.dart';
@@ -24,6 +26,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> with ControllersMixin<H
 
   List<String> trainBoardingList = <String>[];
 
+  Map<String, StationModel> complementDummyMap = <String, StationModel>{};
+
   ///
   @override
   void initState() {
@@ -36,6 +40,20 @@ class _HomeScreenState extends ConsumerState<HomeScreen> with ControllersMixin<H
     trainNotifier.getAllTrain();
 
     geolocNotifier.getAllGeoloc();
+
+    BusInfoRepository().getSupabaseBusInfo().then((List<BusInfoModel> value) {
+      for (final BusInfoModel element in value) {
+        complementDummyMap[element.name] = StationModel(
+          id: 0,
+          trainNumber: '',
+          stationName: element.name,
+          address: element.address,
+          lat: element.latitude,
+          lng: element.longitude,
+          prefecture: '',
+        );
+      }
+    });
   }
 
   ///
@@ -156,7 +174,13 @@ class _HomeScreenState extends ConsumerState<HomeScreen> with ControllersMixin<H
 
   ///
   Widget displayTrainBoardingList() {
-    final Map<String, StationModel> complementDummyMap = utility.getComplementDummyMap();
+    // final Map<String, StationModel> complementDummyMap = utility.getComplementDummyMap();
+    //
+    // //////
+    //
+    //
+    //
+    //
 
     final List<Widget> displayList = <Widget>[];
 
