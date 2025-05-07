@@ -85,6 +85,7 @@ class Utility {
       '多摩川': <String, String>{'東京都': ''},
       '府中': <String, String>{'東京都': ''},
       'ときわ台': <String, String>{'東京都': ''},
+      '中野': <String, String>{'東京都': ''},
       '三郷': <String, String>{'埼玉県': ''},
       '西船橋': <String, String>{'千葉県': ''},
       '船橋': <String, String>{'千葉県': ''},

@@ -243,7 +243,7 @@ class _TrainBoardingMapAlertState extends ConsumerState<TrainBoardingMapAlert>
         stationNameTrainNumberMap: stationState.stationNameTrainNumberMap,
         geolocModelList: geolocState.allGeolocMap[widget.date] ?? <GeolocModel>[],
       ),
-      paddingTop: context.screenSize.height * 0.6,
+      paddingTop: context.screenSize.height * 0.55,
       clearBarrierColor: true,
     );
   }
