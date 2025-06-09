@@ -3,10 +3,11 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../data/http/client.dart';
 import '../../extensions/extensions.dart';
+import '../../models/dup_spot_model.dart';
 import '../../models/station.dart';
-import '../../supabase/dup_spot/dup_spot_model.dart';
-import '../../supabase/dup_spot/dup_spot_repository.dart';
+
 import '../../utility/utility.dart';
+import '../dup_spot/dup_spot.dart';
 import '../train_boarding/train_boarding.dart';
 
 part 'station.freezed.dart';
@@ -44,12 +45,13 @@ class StationController extends _$StationController {
 
       final Map<String, StationModel> map = <String, StationModel>{};
 
+      final Map<String, DupSpotModel> dupSpotMap =
+          ref.watch(dupSpotControllerProvider.select((DupSpotState value) => value.dupSpotMap));
+
       final Map<String, Map<String, String>> duplicationStationDecisionMap = <String, Map<String, String>>{};
 
-      await DupSpotRepository().getSupabaseDupSpotNameLimit().then((List<DupSpotModel> value) {
-        for (final DupSpotModel element in value) {
-          duplicationStationDecisionMap[element.name] = <String, String>{element.area: ''};
-        }
+      dupSpotMap.forEach((String key, DupSpotModel value) {
+        duplicationStationDecisionMap[value.name] = <String, String>{value.area: ''};
       });
 
       // ignore: avoid_dynamic_calls

@@ -1,6 +1,8 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'app_param/app_param.dart';
+import 'bus_stop_address/bus_stop_address.dart';
+import 'dup_spot/dup_spot.dart';
 import 'geoloc/geoloc.dart';
 import 'station/station.dart';
 import 'train/train.dart';
@@ -36,6 +38,18 @@ mixin ControllersMixin<T extends ConsumerStatefulWidget> on ConsumerState<T> {
   GeolocControllerState get geolocState => ref.watch(geolocControllerProvider);
 
   GeolocController get geolocNotifier => ref.read(geolocControllerProvider.notifier);
+
+//==========================================//
+
+  BusStopAddressState get busStopAddressState => ref.watch(busStopAddressControllerProvider);
+
+  BusStopAddressController get busStopAddressNotifier => ref.read(busStopAddressControllerProvider.notifier);
+
+//==========================================//
+
+  DupSpotState get dupSpotState => ref.watch(dupSpotControllerProvider);
+
+  DupSpotController get dupSpotNotifier => ref.read(dupSpotControllerProvider.notifier);
 
 //==========================================//
 }
