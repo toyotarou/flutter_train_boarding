@@ -116,16 +116,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> with ControllersMixin<H
           style: const TextStyle(fontSize: 12),
           child: Column(
             children: <Widget>[
-              SizedBox(
-                height: 100,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    displayYearList(),
-                    const SizedBox.shrink(),
-                  ],
-                ),
-              ),
+              Container(padding: const EdgeInsets.symmetric(vertical: 5), child: displayYearList()),
               Expanded(child: displayTrainBoardingList()),
             ],
           ),
